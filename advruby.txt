@@ -1,0 +1,3487 @@
+My First Ruby Program
+<Installation | TOC | Features>
+
+Let's open up our plain-text editor. As far as possible, ensure that your editor's Tab is set to 2 spaces. We are now ready to write our first Ruby program.
+
+Code layout is pretty much up to you; indentation is not significant (but using two-character indentation will make you friends in the community if you plan on distributing your code).
+
+Create a folder named, say. rubyprograms on your c:/ We shall store all our programs in this folder. Our first program will display the string 'Hello' on the command window and the name of the program will be p001hello.rb
+
+By convention, Ruby source files have the .rb file extension. In Microsoft Windows, Ruby source files sometimes end with .rbw, as in myscript.rbw. The Ruby coding convention states that file/directory name is lower case of class/module name with .rb extension. For example, Foo class has name foo.rb
+
+Type the following in your editor:
+
+# p001hello.rb  
+puts 'Hello'  
+p 'hello'  
+print 'hello'  
+and then click File/Save As... Give the name p001hello.rb and store it in your rubyprograms folder. To run your program, open a command window and type the following as shown in bold:
+
+c:\rubyprograms> ruby p001hello.rb  
+Hello  
+"hello"  
+hello  
+c:\rubyprograms>  
+You should see the output as shown above.
+
+Note: Ruby is a scripting language. There is no special main method in Ruby from which execution begins. The Ruby interpreter is given a script of statements to execute, and it begins executing at the first line and continues to the last line. puts (s in puts stands for string; puts really means put string) simply writes onto the screen whatever comes after it, but then it also automatically goes to the next line. We shall talk about p and print, later on.
+
+a. Parentheses are usually optional with a method call. These calls are all valid:
+foobar
+foobar()
+foobar(a, b, c)
+foobar a, b, c
+
+b. In Ruby, everything from an integer to a string is considered to be an object (more on this later). And each object has built in 'methods' (Ruby term for functions) which can be used to do various useful things. To use a method, you need to put a dot after the object, and then append the method name. Some methods such as puts and gets are available everywhere and don't need to be associated with a specific object.
+Technically speaking, these methods are provided by Ruby's Kernel module (more on this later) and they are included in all Ruby objects (the Kernel module is included by class (more on this later) Object, so its methods are available in every Ruby object). When you run a Ruby application, an object called main of class Object is automatically created. This object provides access to the Kernel methods.
+
+Observe:
+
+Java and C programmers - no need to write a main method/function
+String literals are sequences of characters between single or double quotation marks. I am using single quotes around Hello. ' is more efficient than " (more on this later)
+Ruby is an interpreted language, so you don't have to recompile to execute the program written in Ruby
+The Ruby coding convention states that file/directory name is lower case of class/module name with .rb extension. For example, Foo class has name foo.rb
+
+
+
+Some Features of Ruby
+<First Program | TOC | Numbers>
+
+
+ 
+Some of the features of Ruby are:
+
+Free format - You can start writing your program from any line and column.
+Case sensitive - Lowercase letters and uppercase letters are distinct. The keyword end, for example, is completely different from the keyword END.
+Comments - Anything following an unquoted #, to the end of the line on which it appears, is ignored by the interpreter. Also, to facilitate large comment blocks, the ruby interpreter also ignores anything between a line starting with =begin and another line starting with =end. This only works if the = signs are the first characters of each line.
+Statement delimiters - Multiple statements on one line must be separated by semicolons, but they are not required at the end of a line; a linefeed is treated like a semicolon. If a line ends with a backslash (\), the linefeed following it is ignored; this allows you to have a single logical line that spans several lines
+Keywords - Also known as reserved words (around 41 of them) in Ruby typically cannot be used for other purposes. In addition to these keywords, there are three keyword-like tokens that are treated specially by the Ruby parser when they appear at the beginning of a line: =begin, =end, _END_ You may be used to thinking that a false value may be represented as a zero, a null string, a null character, or various other things. But in Ruby, all of these *values* are true; in fact, everything is true except the reserved words false and nil. Keywords would be called "reserved words" in most languages and they would never be allowed as identifiers. The Ruby parser is flexible and does not complain if you prefix these keywords with @, @@ or $ prefixes and use them as instance, class or global variable names. The best practice is to treat these keywords as reserved.
+Program Encoding - At the lowest level, a Ruby program is simply a sequence of characters. Ruby's lexical rules are defined using characters of the ASCII character set. All Ruby keywords are written using ASCII characters, and all operators and other punctuation are drawn from the ASCII character
+
+
+Numbers in Ruby
+
+
+ 
+
+<Features | TOC | Fun with Strings>
+
+Let's play with Numbers. In Ruby, numbers without decimal points are called integers, and numbers with decimal points are usually called floating-point numbers or, more simply, floats (you must place at least one digit before the decimal point). An integer literal is simply a sequence of digits eg. 0, 123, 123456789. Underscores may be inserted into integer literals (though not at the beginning or end), and this feature is sometimes used as a thousands separator eg. 1_000_000_000. Underscore characters are ignored in the digit string. Here's program p002rubynumbers.rb
+
+# p002rubynumbers.rb  
+=begin  
+ Ruby Numbers  
+ Usual operators:  
+ + addition  
+ - subtraction  
+ * multiplication  
+ / division  
+=end  
+  
+puts 1 + 2  
+puts 2 * 3  
+# Integer division  
+# When you do arithmetic with integers, you'll get integer answers  
+puts 3 / 2  
+puts 10 - 11  
+puts 1.5 / 2.6  
+Ruby integers are objects of class Fixnum or Bignum. The Fixnum and Bignum classes represent integers of differing sizes. Both classes descend from Integer (and therefore Numeric). The floating-point numbers are objects of class Float, corresponding to the native architecture's double data type. The Complex, BigDecimal, and Rational classes are not built-in to Ruby but are distributed with Ruby as part of the standard library. We shall be talking about classes in detail later.
+
+The class hierarchy (courtesy: Donald Craig) is as shown in the figure below:
+
+
+
+Operators and Precedence
+
+Let us look at Ruby's operators (courtesy: Dave Thomas' - Programming Ruby). They are arranged here in order from highest to lowest precedence.
+
+
+
+a. The increment and decrement operators (++ and --) are not available in Ruby, neither in "pre" nor "post" forms. However, do note that the += and -= are available.
+b. Brackets (parentheses) work the same way as with regular arithmetic. Anything inside brackets is calculated first (or, more technically, given higher precedence).
+c. The check marked operators is a kind of syntactic sugar (more on this later) - where something looks like an operator but is a method call.
+
+The Ruby modulus operator's (%) behavior is as follows:
+
+puts (5 % 3)     # prints  2  
+puts (-5 % 3)    # prints  1  
+puts (5 % -3)    # prints -1  
+puts (-5 % -3)   # prints -2  
+Ruby's definition of the modulo (%) operator differs from that of C and Java. In Ruby, -7%3 is 2. In C and Java, the result is -1 instead. In Ruby, the sign of the result (for % operator) is always the same as the sign of the second operand.
+
+Difference between or and || operator.
+
+Both or and || return their first argument unless it is false, in which case they evaluate and return their second argument. This is shown in the following example:
+
+puts nil || 2008  
+puts false || 2008  
+puts "ruby" || 2008  
+The output is:
+
+>ruby test.rb  
+2008  
+2008  
+ruby  
+>Exit code: 0  
+The only difference between or and || is their precedence. || has a higher precedence than or.
+
+A common idiom is to use || to assign a value to a variable only if that variable isn't already set. This can be written as:
+
+@variable = @variable || "default value"  
+or, more idiomatically, as:
+
+@variable ||= "default value"  
+One reason for these alternate versions of the Boolean operators is the fact that they have lower precedence than the assignment operator. This means that you can write a Boolean expression such as the following that assigns values to variables until it encounters a false value:
+
+if a = f(x) and b = f(y) and c = f(z) then d = g(a,b,c) end  
+This expression simply would not work if written with && instead of and.
+
+
+Fun with Strings
+
+
+ 
+
+<Numbers | TOC | Variables and Assignment>
+
+String literals are sequences of characters between single or double quotation marks.
+
+'' (ie. two single quotes) does not have anything in it at all; we call that an empty string.
+
+Here's a program p003rubystrings.rb that explores strings to some extent.
+
+# p003rubystrings.rb  
+=begin  
+  Ruby Strings  
+  In Ruby, strings are mutable  
+=end  
+  
+puts "Hello World"  
+# Can use " or ' for Strings, but ' is more efficient  
+puts 'Hello World'  
+# String concatenation  
+puts 'I like' + ' Ruby'  
+# Escape sequence  
+puts 'It\'s my Ruby'  
+# New here, displays the string three times  
+puts 'Hello' * 3  
+# Defining a constant  
+# More on Constants later, here  
+# http://rubylearning.com/satishtalim/ruby_names.html  
+PI = 3.1416  
+puts PI  
+a. If puts is passed an object that is not a string, puts calls the to_s method of that object and prints the string returned by that method.
+b. In Ruby, strings are mutable. They can expand as needed, without using much time and memory. Ruby stores a string as a sequence of characters.
+
+It's worth knowing that a special kind of string exists that uses the back-tick (`) or Grave accent as called in the US, as a beginning and ending delimiter. For example:
+
+puts `dir`  
+The command output string is sent to the operating system as a command to be executed (under windows operating system, we have sent the dir command), whereupon the output of the command (dir on a command window would display all the files and sub directories in your folder) is then displayed by puts.
+
+On Linux and Mac, you can instead do:
+
+puts `ls`  
+Another way to spawn a separate process is to use the Kernel method system. The method executes the given command in a sub-process; it returns true if the command was found and executed properly. It returns false if command exited with a nonzero exit status, and nil if the command failed to execute. Remember, the command's output will simply go to the same destination as your program's output.
+
+system("tar xzf test.tgz") # => true
+
+
+Variables and Assignment
+
+
+ 
+
+<Fun With Strings | TOC | Scope>
+
+To store a number or a string in your computer's memory for use later in your program, you need to give the number or string a name. Programmers often refer to this process as assignment and they call the names variables. A variable springs into existence as soon as the interpreter sees an assignment to that variable.
+
+s = 'Hello World!'  
+x = 10  
+A bareword is any combination of letters, numbers, and underscores, and is not qualified by any symbols (Reference: http://alumnus.caltech.edu/~svhwan/prodScript/avoidBarewords.html). Local variables and barewords look similar; they must start with either the underscore character (_) or a lowercase letter, and they must consist entirely of letters, numbers, and underscores. Remember, local variable references look just like method invocation expressions and Keywords can't be used as variable names.
+
+Method calls can also be barewords, such as my_method. gets is a method call; so is system. Whenever Ruby sees a bareword, it interprets it as one of three things: (a) If there's an equal sign (=) to the right of the bareword, it's a local variable undergoing an assignment. (b) Ruby has an internal list of keywords and a bareword could be a keyword.(c) If the bareword is not (a) or (b) above, the bareword is assumed to be a method call. If no method by that name exists, Ruby raises a NameError.
+
+The p004stringusage.rb shows us some more usage with strings.
+
+# p004stringusage.rb  
+# Defining a constant  
+PI = 3.1416  
+puts PI  
+# Defining a local variable  
+myString = 'I love my city, Pune'  
+puts myString  
+=begin  
+  Conversions  
+  .to_i, .to_f, .to_s  
+=end  
+var1 = 5;  
+var2 = '2'  
+puts var1 + var2.to_i  
+# << appending to a string  
+a = 'hello '  
+a<<'world. 
+I love this world...'  
+puts a  
+=begin  
+  << marks the start of the string literal and  
+  is followed by a delimiter of your choice.  
+  The string literal then starts from the next  
+  new line and finishes when the delimiter is  
+  repeated again on a line on its own. This is known as  
+  Here document syntax.  
+=end  
+a = <<END_STR  
+This is the string  
+And a second line  
+END_STR  
+puts a  
+In the example:
+x = "200.0".to_f
+the dot means that the message "to_f" is being sent to the string "200.0", or that the method to_f is being called on the string "200.0". The string "200.0" is called the receiver of the message. Thus, when you see a dot in this context, you should interpret it as a message (on the right) being sent to an object (on the left).
+
+
+Ruby Summary
+<Variables and Assignment | TOC | Scope>
+
+
+ 
+We are discussing Ruby 1.9 on the Windows platform. This course is appropriate for Linux/Mac users as well.
+Ruby is an interpreted language
+In Ruby, there's always more than one way to solve a given problem.
+Code layout is pretty much up to you; indentation is not significant (but using two-character indentation will make you friends in the community if you plan on distributing your code).
+By convention, Ruby source files have the .rb file extension. In Microsoft Windows, Ruby source files sometimes end with .rbw, as in myscript.rbw.
+In Ruby, program execution proceeds in general from top to bottom.
+Features: Free format, Case sensitive, Two type of comments, Statement delimiters are not required, Around 41 Keywords, and all Ruby keywords are written using ASCII characters, and all operators and other punctuation are drawn from the ASCII character set.
+You may be used to thinking that a false value may be represented as a zero, a null string, a null character, or various other things. But in Ruby, all of these *values* are true; in fact, everything is true except the reserved words false and nil.
+We shall be referring to the documentation here.
+puts (s in puts stands for string; puts really means put string) simply writes onto the screen whatever comes after it, but then it also automatically goes to the next line.
+Parentheses are usually optional with a method call. These calls are all valid:
+foobar
+foobar()
+foobar(a, b, c)
+foobar a, b, c
+In Ruby, numbers without decimal points are called integers, and numbers with decimal points are usually called floating-point numbers or, more simply, floats (you must place at least one digit before the decimal point).
+Note: The Fixnum and Bignum classes represent integers of differing sizes. Both classes descend from Integer (and therefore Numeric). Ruby is able to deal with extremely large numbers, and unlike many other programming languages, there are no inconvenient limits. Ruby does this with different classes, one called Fixnum (default) that represents easily managed smaller numbers, and another, aptly called Bignum, that represents "big" numbers Ruby needs to manage internally. Ruby will handle Bignums and Fixnums for you, and you can perform arithmetic and other operations without any problems. Results might vary depending on your system's architecture, but as these changes are handled entirely by Ruby, there's no need to worry.
+Some very common Ruby operators:+ addition; - subtraction; * multiplication; / division
+The increment and decrement operators (++ and --) are not available in Ruby, neither in "pre" nor "post" forms.
+Anything inside brackets is calculated first (or, more technically, given higher precedence).
+Observe how the modulus operator (%) works in Ruby.
+When you do arithmetic with integers, you'll get integer answers.
+String literals are sequences of characters between single or double quotation marks.
+In Ruby, strings are mutable. They can expand as needed, without using much time and memory.
+String concatenation is joining of two strings, using the + operator.
+The operator << is used to append to a string
+Escape sequence is the \ character. Examples: \", \\, \n
+'' is an empty string.
+If you get a compilation error like - #<TypeError: cannot convert Fixnum into String> it means that you cannot really add a number to a string, or multiply a string by another string.
+Constants begin with capital letters. Example PI, Length
+A variable springs into existence as soon as the interpreter sees an assignment to that variable. It is a good practice to assign nil to a local variable initially, otherwise a runtime error will be generated if the local variable is used without being assigned a value.
+Use whitespace around the assignment operator:
+foo = 1
+
+not:
+
+foo=1
+Use one initialization per line:
+
+level = 0
+size = 0
+
+is preferred over:
+
+level = size = 0
+x, y = y, x will interchange the values of x and y. Parallel assignment is any assignment expression that has more than one lvalue, more than one rvalue, or both. Multiple lvalues and multiple rvalues are separated from each other with commas.
+Local variables must start with either a lowercase letter or the underscore character (_), and they must consist entirely of letters, numbers, and underscores. Examples: india, _usa, some_var
+.to_i, .to_f, .to_s are used to convert to an integer, float, string respectively.
+
+
+Scope
+
+
+ 
+
+<Variables and Assignment | TOC | Getting Input>
+
+Scope refers to the reach or visibility of variables. Different types of variables have different scoping rules. We'll be talking chiefly about two types: global and local variables.
+
+Global scope and global variables
+
+We're starting with the scope that's used least often, but which you need to be aware of: global scope, meaning scope that covers the entire program. Global scope is enjoyed by global variables. Global variables are distinguished by starting with a dollar-sign ($) character. They are available everywhere in your program. Global variables never go out of scope. However, global variables are used very little by experienced programmers (except perhaps a few of the built-in ones).
+
+Built-in global variables
+
+The Ruby interpreter starts up with a fairly large number of global variables already initialized. These variables store information that's of potential use anywhere and everywhere in your program. For example, the global variable $0 contains the name of the file Ruby is executing. The global $: (dollar sign followed by a colon) contains the directories that make up the path Ruby searches when you load an external file. $$ contains the process id of the Ruby process. And there are more.
+
+Local scope
+
+Note: Do not worry if you do not understand this, right now.
+You can tell by looking at a Ruby program where the local scopes begin and end, based on a few rules:
+
+The top level (outside of all definition blocks) has its own local scope.
+Every class or module definition block (class, module) has its own local scope, even nested class/module definition blocks.
+Every method definition (def) has its own local scope.
+
+
+Ruby Names
+<Getting Input | TOC | More on Methods >
+
+
+ 
+Ruby Names are used to refer to constants, variables, methods, classes, and modules. The first character of a name helps Ruby to distinguish its intended use. Certain names, are reserved words and should not be used as variable, method, class, or module name. Lowercase letter means the characters "a" through "z". Uppercase letter means ''A'' through ''Z,'' and digit means "0" through "9". A name is an uppercase letter, lowercase letter, or an underscore ("_"), followed by Name characters (this is any combination of upper- and lowercase letters, underscore and digits).
+
+Variables
+
+Variables in Ruby can contain data of any type. You can use variables in your Ruby programs without any declarations. Variable name itself denotes its scope (local, global, instance, etc.).
+
+A local variable (declared within an object) name consists of a lowercase letter (or an underscore) followed by name characters (sunil, _z, hit_and_run).
+An instance variable (declared within an object always "belongs to" whatever object self refers to) name starts with an ''at'' sign (''@'') followed by a name (@sign, @_, @Counter).
+A class variable (declared within a class) name starts with two ''at'' signs (''@@'') followed by a name (@@sign, @@_, @@Counter). A class variable is shared among all objects of a class. Only one copy of a particular class variable exists for a given class. Class variables used at the top level are defined in Object and behave like global variables. Class variables are rarely used in Ruby programs.
+Global variables start with a dollar sign (''$'') followed by name characters. A global variable name can be formed using ''$-'' followed by any single character ($counter, $COUNTER, $-x). Ruby defines a number of global variables that include other punctuation characters, such as $_ and $-K.
+Constants
+
+A constant name starts with an uppercase letter followed by name characters. Class names and module names are constants, and follow the constant naming conventions. Examples: module MyMath, PI=3.1416, class MyPune.
+
+Method Names
+
+Method names should begin with a lowercase letter (or an underscore). "?", "!" and "=" are the only weird characters allowed as method name suffixes (! or bang labels a method as dangerous-specifically, as the dangerous equivalent of a method with the same name but without the bang. More on Bang methods later.).
+
+The Ruby convention is to use underscores to separate words in a multiword method or variable name. By convention, most constants are written in all uppercase with underscores to separate words, LIKE_THIS. Ruby class and module names are also constants, but they are conventionally written using initial capital letters and camel case, LikeThis.
+It's to be noted that any given variable can at different times hold references to objects of many different types. A Ruby constant is also a reference to an object. Constants are created when they are first assigned to (normally in a class or module definition; they should not be defined in a method - more on constants later). Ruby lets you alter the value of a constant, although this will generate a warning message. Also, variables in Ruby act as "references" to objects, which undergo automatic garbage collection.
+
+An example to show Ruby is dynamically typed - p007dt.rb
+
+# p007dt.rb  
+# Ruby is dynamic  
+x = 7           # integer  
+x = "house"  # string  
+x = 7.5        # real  
+  
+# In Ruby, everything you manipulate is an object  
+'I love Ruby'.length  
+The basic types in Ruby are Numeric (subtypes include Fixnum, Integer, and Float), String, Array, Hash, Object, Symbol, Range, and RegExp.
+
+Though we have not learned classes yet, nevertheless, here are some more details about a class called Float.
+
+Float is a sub class of Numeric.
+
+Float objects represent real numbers using the native architecture's double-precision floating point representation.
+
+DIG is a class constant that gives precision of Float in decimal digits. MAX is another class constant that gives the largest Float.
+
+On my PC, the code:
+
+puts Float::DIG  
+outputs 15. And.
+
+puts Float::MAX  
+outputs 1.79769313486232e+308
+
+Let us look at Peter Cooper's example in his Beginning Ruby book (never mind if you do not follow the code yet):
+
+rice_on_square = 1  
+64.times do |square|  
+  puts "On square #{square + 1} are #{rice_on_square} grain(s)"  
+  rice_on_square *= 2  
+end  
+By square 64, you're up to placing many trillions of grains of rice on each square!
+
+It proves that Ruby is able to deal with extremely large numbers, and unlike many other programming languages, there are no inconvenient limits. Ruby does this with different classes, one called Fixnum (default) that represents easily managed smaller numbers, and another, aptly called Bignum, that represents "big" numbers Ruby needs to manage internally. Ruby will handle Bignums and Fixnums for you, and you can perform arithmetic and other operations without any problems. Results might vary depending on your system's architecture, but as these changes are handled entirely by Ruby, there's no need to worry.
+
+Ruby doesn't require you to use primitives (data types) when manipulating data of these types - if it looks like an integer, it's probably an integer; if it looks like a string, it's probably a string. The class Object has a method called class that returns the class of an object, for example:
+
+s = 'hello'  
+s.class  # String  
+Another example: (Don't worry if you do not understand the code now).
+
+puts 'I am in class = ' + self.class.to_s  
+puts 'I am an object = ' + self.to_s  
+print 'The object methods are = '  
+puts self.private_methods.sort  
+We shall talk about self later on. private_methods is a method of the Object class and sort is a method of the Array class.
+
+In Ruby, everything you manipulate is an object, and the results of those manipulations are themselves objects. There are no primitives or data-types.
+
+5.times { puts "Mice!\n" } # more on blocks later  
+"Elephants Like Peanuts".length
+
+
+Writing Own Ruby Methods
+
+
+ 
+
+<More on Ruby Methods | TOC | Ruby ri Tool>
+
+Let's look at writing one's own methods in Ruby with the help of a simple program p008mymethods.rb. Observe that we use def and end to declare a method. Parameters are simply a list of local variable names in parentheses.
+
+We do not declare the return type; a method returns the value of the last statement executed in the method. It is recommended that you leave a single blank line between each method definition. The parentheses around a method's arguments are optional; our convention is to use them when a method has arguments and omit them when it doesn't. In Rails, you will see methods calls with no parentheses.
+
+# p008mymethods.rb  
+# A method returns the value of the last line  
+# Methods that act as queries are often named with a trailing ?  
+# Methods that are "dangerous," or modify the receiver, might be named  
+# with a trailing ! (Bang methods)  
+# A simple method  
+def hello  
+  'Hello'  
+end  
+#use the method  
+puts hello  
+  
+# Method with an argument - 1  
+def hello1(name)  
+  'Hello ' + name  
+end  
+puts(hello1('satish'))  
+  
+# Method with an argument - 2  
+def hello2 name2  
+  'Hello ' + name2  
+end  
+puts(hello2 'talim')  
+The output when I ran the program on my PC was:
+
+>ruby p008mymethods.rb  
+Hello  
+Hello satish  
+Hello talim  
+>Exit code: 0  
+Ruby lets you specify default values for a method's arguments-values that will be used if the caller doesn't pass them explicitly. You do this using the assignment operator. See example p009mymethods1.rb
+
+# p009mymethods1.rb  
+# interpolation refers to the process of inserting the result of an  
+# expression into a string literal  
+# the interpolation operator #{...} gets calculated separately  
+def mtd(arg1="Dibya", arg2="Shashank", arg3="Shashank")  
+  "#{arg1}, #{arg2}, #{arg3}."  
+end  
+puts mtd  
+puts mtd("ruby")  
+The output when I ran the program on my PC was:
+
+>ruby p009mymethods1.rb  
+Dibya, Shashank, Shashank.  
+ruby, Shashank, Shashank.  
+>Exit code: 0  
+Please note that as of now, there is no way, to specify a value for the second parameter and use the default value of the first parameter.
+
+In the above program the interpolation operator #{...} gets calculated separately and the results of the calculation are pasted automatically into the string. When you run these lines, you don't see the #{...} operator on your screen; instead, you see the results of calculating or evaluating what was inside that operator.
+
+Note: Interpolation refers to the process of inserting the result of an expression into a string literal. The way to interpolate within a string is to place the expression within #{ and } symbols. An example demonstrates this:
+
+puts "100 * 5 = #{100 * 5}"  
+This displays:
+
+100 * 5 = 500  
+The #{100 * 5} section interpolates the result of 100 * 5 (500) into the string at that position, resulting in the output shown.
+
+The example p010aliasmtd.rb talks about Aliasing a method.
+
+alias new_name old_name  
+creates a new name that refers to an existing method. When a method is aliased, the new name refers to a copy of the original method's body. If the method is subsequently redefined, the aliased name will still invoke the original implementation.
+
+# p010aliasmtd.rb  
+# alias new_name old_name  
+# When a method is aliased, the new name refers  
+# to a copy of the original method's body  
+  
+def oldmtd  
+  "old method"  
+end  
+alias newmtd oldmtd  
+def oldmtd  
+  "old improved method"  
+end  
+puts oldmtd  
+puts newmtd  
+The output is:
+
+>ruby p010aliasmtd.rb  
+old improved method  
+old method  
+>Exit code: 0  
+alias creates a new name that refers to an existing method, operator, global variable, or regular expression backreference ($&, $`, $', and $+). Local variables, instance variables, class variables, and constants may not be aliased. The parameters to alias may be names or symbols.
+
+Does Ruby allow us to write functions that can accept variable number of parameters? Yes, see the following example - p011vararg.rb
+
+# p011vararg.rb  
+# variable number of parameters example  
+# The asterisk is actually taking all arguments you send to the method  
+# and assigning them to an array named my_string as shown below  
+# The do end is a Ruby block which we talk in length later  
+def foo(*my_string)  
+  my_string.each do |words|  
+    words  
+  end  
+end  
+puts foo('hello','world')  
+puts foo()  
+The asterisk is actually taking all arguments you send to the method and assigning them to an array named my_string. The do end is a Ruby block. As you can see, by making use of the asterisk, we're even able to pass in zero arguments. The code above will result in the words hello and world written on successive lines in the first method call and nothing being written on the second call, as you can see in the following output:
+
+>ruby p011vararg.rb  
+hello  
+world  
+>Exit code: 0  
+If you want to include optional arguments (*x), they have to come after any non-optional arguments:
+
+def opt_args(a,b,*x) # right
+def opt_args(a,*x,b) # wrong
+
+What is the maximum number of parameters we can pass in Ruby? There's no limit to the number of parameters.
+
+What is the sequence in which the parameters are put on to the stack? Left to right like C or right to left like Pascal? The answer is Left to right as you can see in this example p012mtdstack.rb
+
+# p012mtdstack.rb  
+# Sequence in which the parameters are put on to the stack is left to right  
+def mtd(a=99, b=a+1)  
+  [a,b]  
+end  
+puts mtd  
+Are the parameters passed by value or reference? Observe the following example:
+
+def downer(string)  
+  string.downcase  
+end  
+a = "HELLO"  
+downer(a)      # -> "hello"  
+puts a         # -> "HELLO"  
+  
+def downer(string)  
+  string.downcase!  
+end  
+a = "HELLO"  
+downer(a)      # -> "hello"  
+puts a         # -> "hello"  
+Gary Wright in the Ruby forum posted in reply to some posts: "It is confusing to me to even think about methods returning objects unless you are using that as a very specific shorthand for saying that methods return *references* to objects. That is the unifying idea that helped me understand how Ruby manipulates data -- it is all references and not the objects themselves. The objects themselves are almost completely hidden from the programmer (excluding C extensions) in Ruby. Everything is a reference to an object."
+
+Bang (!) Methods
+
+Ruby methods that modify an object in-place and end in an exclamation mark are known as bang methods. By convention, the bang labels a method as dangerous - specifically, as the dangerous equivalent of a method with the same name but without the bang.
+
+You'll find a number of pairs of methods, one with the bang and one without. Those without the bang perform an action and return a freshly minted object, reflecting the results of the action (capitalizing a string, sorting an array, and so on). The bang versions of the same methods perform the action, but they do so in place: Instead of creating a new object, they transform the original object.
+
+Examples of such pairs of methods include sort/sort! for arrays, upcase/upcase! for strings, chomp/chomp! for strings, and reverse/reverse! for strings and arrays. In each case, if you call the non-bang version of the method on the object, you get a new object. If you call the bang version, you operate in-place on the same object to which you sent the message.
+
+In Ruby you can define a method name that ends with an exclamation point or bang. The bang methods are called and executed just like any other method. However, by convention, a method with an exclamation point or bang is considered dangerous.
+
+Normally for the built-in classes, dangerous usually (although not always) means this method, unlike its non-bang equivalent, permanently modifies its receiver.
+
+You'll find a number of methods, one with the bang and one without. Those without the bang perform an action and return a new object. The bang versions of the same methods perform the action, but they do so in place: Instead of creating a new object, they transform the original object.
+
+A few non-bang methods perform changes on the original string. The names of these methods make it clear that this is happening (such as replace), even though there's no ! on the name.
+
+Method names ending with ?
+
+The question mark has no special meaning to the Ruby interpreter. However, by convention, any method whose name ends with ? returns a value that answers the question posed by the method invocation. The empty? method of an array, for example, returns true if the array has no elements. Mostly such methods return one of the Boolean values true or false, but this is not required, as any value other than false or nil works like true when a Boolean value is required. The Numeric method nonzero?, for example, returns nil if the number it is invoked on is zero, and just returns the number otherwise
+
+Ruby Summary
+<Writing own Ruby Methods | TOC | Ruby ri Tool>
+
+
+ 
+Avoid using Global scope and Global Variables. Global scope means scope that covers the entire program. Global variables are distinguished by starting with a dollar-sign ($) character. The Ruby interpreter starts up with a fairly large number of global variables already initialized. Global variables are distinguished by starting with a dollar-sign ($) character. The Ruby interpreter starts up with a fairly large number of global variables already initialized. Global variables don't mesh well with the ideals of object-oriented programming, as once you start using global variables across an application, your code is likely to become dependent on them. Because the ability to separate blocks of logic from one another is a useful aspect of object-oriented programming, global variables are not favored.
+gets (get a string) and chomp (a string method) are used to accept input from a user.
+gets returns a string and a '\n' character, while chomp removes this '\n'.
+STDOUT is a global constant which is the actual standard output stream for the program. flush flushes any buffered data within io to the underlying operating system (note that this is Ruby internal buffering only; the OS may buffer the data as well). The usage is not mandatory but recommended.
+To format the output to say 2 decimal places, we can use the Kernel's format method.
+Ruby Names are used to refer to constants, variables, methods, classes, and modules. The first character of a name helps Ruby to distinguish its intended use.
+Lowercase letter means the characters "a" though "z", as well as "_", the underscore. Uppercase letter means "A" though "Z", and digit means "0" through "9".
+A name is an uppercase letter, lowercase letter, or an underscore, followed by Name characters: This is any combination of upper- and lowercase letters, underscore and digits.
+You can use variables in your Ruby programs without any declarations. Variable name itself denotes its scope (local, global, instance, etc.).
+REMEMBER the way local, instance, class and global variables, constants and method names are declared.
+"?", "!" and "=" are the only weird characters allowed as method name suffixes.
+The Ruby convention is to use underscores to separate words in a multiword method or variable name. By convention, most constants are written in all uppercase with underscores to separate words, LIKE_THIS. Ruby class and module names are also constants, but they are conventionally written using initial capital letters and camel case, LikeThis. More examples: my_variable, MyModule, MyClass, My_Constant.
+Any given variable can at different times hold references to objects of many different types.
+Variables in Ruby act as "references" to objects, which undergo automatic garbage collection.
+For the time being, remember that Ruby is dynamically typed and that in Ruby, everything you manipulate is an object and the results of those manipulations are themselves objects.
+The basic types in Ruby are Numeric (subtypes include Fixnum, Integer, and Float), String, Array, Hash, Object, Symbol, Range, and RegExp.
+For the time being, remember that you can always see what object you are in (current object) by using the special variable self.
+We use def and end to declare a method. Parameters are simply a list of local variable names in parentheses.
+We do not declare the return type; a method returns the value of the last statement.
+It is recommended that you leave a single blank line between each method definition.
+Ruby allows parentheses to be omitted from most method declarations and / or invocations. In simple cases, this results in clean-looking code. In complex cases, however, it causes syntactic ambiguities and confusion.
+Methods that act as queries are often named with a trailing ?
+Methods that are "dangerous," or modify the receiver, might be named with a trailing ! (Bang methods)
+Ruby lets you specify default values for a method's arguments-values that will be used if the caller doesn't pass them explicitly. You do this using the assignment operator.
+For now remember that there is an interpolation operator #{...}
+alias creates a new name that refers to an existing method. When a method is aliased, the new name refers to a copy of the original method's body. If the method is subsequently redefined, the aliased name will still invoke the original implementation.
+In Ruby, we can write methods that can accept variable number of parameters.
+There's no limit to the number of parameters one can pass to a method.
+The sequence in which the parameters are put on to the stack are left to right.
+
+
+ri and RDoc
+
+If you have a good internet connection, then you would probably refer to the Ruby documentation online. However, for those with a slower connection or not having an internet access, the Ruby ri and RDoc tools are very useful.
+
+ri (Ruby Index) and RDoc (Ruby Documentation) are a closely related pair of tools for providing documentation about Ruby programs. ri is a command-line tool; the RDoc system includes the command-line tool rdoc. ri and rdoc are standalone programs; you run them from the command line.
+
+RDoc is a documentation system. If you put comments in your program files (Ruby or C) in the prescribed RDoc format, rdoc scans your files, extracts the comments, organizes them intelligently (indexed according to what they comment on), and creates nicely formatted documentation from them. You can see RDoc markup in many of the C files in the Ruby source tree and many of the Ruby files in the Ruby installation.
+
+The Ruby ri tool is used to view the Ruby documentation off-line. Open a command window and invoke ri followed by the name of a Ruby class, module or method. ri will display documentation for you. You may specify a method name without a qualifying class or module name, but this will just show you a list of all methods by that name (unless the method is unique). Normally, you can separate a class or module name from a method name with a period. If a class defines a class method and an instance method by the same name, you must instead use :: to refer to a class method or # to refer to the instance method. Here are some example invocations of ri:
+
+ri Array  
+ri Array.sort  
+ri Hash#each  
+ri Math::sqrt  
+ri dovetails with RDoc: It gives you a way to view the information that RDoc has extracted and organized. Specifically (although not exclusively, if you customize it), ri is configured to display the RDoc information from the Ruby source files. Thus on any system that has Ruby fully installed, you can get detailed information about Ruby with a simple command-line invocation of ri. Some more information is available here:
+
+
+More On Strings
+
+
+ 
+
+<Ruby ri Tool | TOC | Simple Constructs>
+
+There are many methods in the String class (you don't have to memorize them all; you can look up the documentation) like the reverse that gives a backwards version of a string (reverse does not change the original string). length that tells us the number of characters (including spaces) in the string. upcase changes every lowercase letter to uppercase, and downcase changes every uppercase letter to lowercase. swapcase switches the case of every letter in the string, and finally, capitalize is just like downcase, except that it switches the first character to uppercase (if it is a letter), slice gives you a substring of a larger string.
+
+The methods upcase, downcase, swapcase and capitalize have corresponding methods that modify a string in place rather than creating a new one: upcase!, downcase!, swapcase! and capitalize!. Assuming you don't need the original string, these methods will save memory, especially if the string is large.
+
+We know that String literals are sequences of characters between single or double quotation marks. The difference between the two forms is the amount of processing Ruby does on the string while constructing the literal. In the single-quoted case, Ruby does very little. The backslash works to escape another backslash, so that the second backslash is not itself interpreted as an escape character. In single-quoted strings, a backslash is not special if the character that follows it is anything other than a quote or a backslash. For example 'a\b' and 'a\\b' are equal. In the double-quoted case, Ruby does more work. First, it looks for substitutions - sequences that start with a backslash character - and replaces them with some binary value. The second thing that Ruby does with double-quoted strings is expression interpolation. Within the string, the sequence #{expression} is replaced by the value of expression (refer p013expint.rb). In this program, the value returned by a Ruby method is the value of the last expression evaluated, so we can get rid of the temporary variable (result) and the return statement altogether.
+
+# p013expint.rb  
+def say_goodnight(name)  
+  result = "Good night, #{name}"  
+  return result  
+end  
+puts say_goodnight('Satish')  
+  
+# modified program  
+def say_goodnight2(name)  
+  "Good night, #{name}"  
+end  
+puts say_goodnight2('Talim')  
+It is to be noted that every time a string literal is used in an assignment or as a parameter, a new String object is created.
+
+How is memory managed for Strings in Ruby? Is there a separate pool for Strings? Strings are objects of class String. The String class has more than 75 standard methods. If you refer to Ruby User's Guide, it says that "we do not have to consider the space occupied by a string. We are free from all memory management."
+
+Listing all methods of a class or object
+
+String.methods.sort
+shows you a list of methods that the Class object String responds to.
+
+String.instance_methods.sort
+This method tells you all the instance methods that instances of String are endowed with.
+
+String.instance_methods(false).sort
+With this method, you can view a class's instance methods without those of the class's ancestors.
+
+Comparing two strings for equality
+
+Strings have several methods for testing equality. The most common one is == (double equals sign). Another equality-test instance method, String.eql?, tests two strings for identical content. It returns the same result as ==. A third instance method, String.equal?, tests whether two strings are the same object. An example p013strcmp.rb illustrates this:
+
+# p013strcmp.rb  
+# String#eql?, tests two strings for identical content.  
+# It returns the same result as ==  
+# String#equal?, tests whether two strings are the same object  
+s1 = 'Jonathan'  
+s2 = 'Jonathan'  
+s3 = s1  
+if s1 == s2  
+  puts 'Both Strings have identical content'  
+else  
+  puts 'Both Strings do not have identical content'  
+end  
+if s1.eql?(s2)  
+  puts 'Both Strings have identical content'  
+else  
+  puts 'Both Strings do not have identical content'  
+end  
+if s1.equal?(s2)  
+  puts 'Two Strings are identical objects'  
+else  
+  puts 'Two Strings are not identical objects'  
+end  
+if s1.equal?(s3)  
+  puts 'Two Strings are identical objects'  
+else  
+  puts 'Two Strings are not identical objects'  
+end  
+Using %w
+
+Sometimes creating arrays of words can be a pain, what with all the quotes and commas. Fortunately, Ruby has a shortcut: %w does just what we want.
+
+names1 = [ 'ann', 'richard', 'william', 'susan', 'pat' ]  
+puts names1[0] # ann  
+puts names1[3] # susan  
+# this is the same:  
+names2 = %w{  ann richard william susan pat }  
+puts names2[0] # ann  
+puts names2[3] # susan  
+
+
+Simple Constructs
+
+
+ 
+
+<More on Strings | TOC | Ruby Blocks>
+
+Let's explore some very simple constructs available in Ruby. The example below p014constructs.rb illustrates the if else end construct. By the Ruby convention, if and while do not require parenthesis.
+
+# p014constructs.rb  
+# In Ruby, nil and false evaluate to false,  
+# everything else (including true, 0) means true  
+# nil is an actual object  
+# if else end  
+var = 5  
+if var > 4  
+  puts "Variable is greater than 4"  
+  puts "I can have multiple statements here"  
+  if var == 5  
+    puts "Nested if else possible"  
+  else  
+    puts "Too cool"  
+  end  
+else  
+  puts "Variable is not greater than 5"  
+  puts "I can have multiple statements here"  
+end  
+An example of using elsif is there in the program p015elsifex.rb as shown below:
+
+# p015elsifex.rb  
+# elseif example  
+  
+# Original example  
+puts "Hello, what's your name?"  
+STDOUT.flush  
+name = gets.chomp  
+puts 'Hello, ' + name + '.' 
+ 
+if name == 'Satish' 
+    puts 'What a nice name!!' 
+else 
+    if name == 'Sunil' 
+        puts 'Another nice name!' 
+    end 
+end 
+ 
+# Modified example with elseif 
+puts "Hello, what's your name?"  
+STDOUT.flush  
+name = gets.chomp  
+puts 'Hello, ' + name + '.'  
+  
+if name == 'Satish'  
+    puts 'What a nice name!!'  
+elsif name == 'Sunil'  
+        puts 'Another nice name!'  
+end  
+  
+# Further modified  
+puts "Hello, what's your name?"  
+STDOUT.flush  
+name = gets.chomp  
+puts 'Hello, ' + name + '.' 
+ 
+# || is the logical or operator 
+if name == 'Satish' || name == 'Sunil' 
+    puts 'What a nice name!!'  
+end  
+Some common conditional operators are: ==, != >=, <=, >, <
+
+unless, as a statement or a modifier, is the opposite of if: it executes code only if an associated expression evaluates to false or nil. Ruby's unless construct begins with unless and ends with end. The body is the text between the two.
+
+unless ARGV.length == 2  
+  puts "Usage: program.rb 23 45"  
+  exit  
+end  
+In the above program, the body is executed unless the number of elements in the array is equal to 2 (meaning that both arguments were given). The method Kernel.exit terminates your program, returning a status value to the operating system.
+
+Loops like the while loop are available. Again, the example below illustrates the same.
+
+# Loops  
+var = 0  
+while var < 10  
+  puts var.to_s  
+  var += 1  
+end  
+Conditional ?:
+
+As a concise alternative to simple if/else statements we can use the conditional or ternary ?: operator. It is the only ternary operator (three operands) in Ruby. It has the following basic structure:
+
+(condition) ? (result if condition is true) : (result if condition is false)  
+The first operand appears before the question mark. The second operand appears between the question mark and the colon. An the third operand appears after the colon. The question mark must appear on the same line as the first argument and the colon must appear on the same line as the second argument. The ?: operator always evaluates its first operand. If the first operand is anything other than false or nil, the value of the expression is the value of the second operand. Otherwise, if the first operand is false or nil, then the value of the expression is the value of the third operand. The ?: operator acts like a compact if/then/else statement. Let's look at an example:
+
+age = 15  
+# We talk about the Range class later on  
+# will output teenager  
+puts (14...20).include?(age) ? "teenager" : "not a teenager"  
+The ternary operator also can be useful for conditional assignments:
+
+age = 23  
+person = (14...20).include?(age) ? "teenager" : "not a teenager"  
+puts person # => "not a teenager"  
+Statement modifiers
+
+Ruby statement modifiers are a useful shortcut if the body of an if or while statement is just a single expression. Simply write the expression, followed by if or while and the condition. For example, here's a simple if statement.
+
+puts "Enrollments will now Stop" if participants > 2500  
+Case Expressions
+
+This form is fairly close to a series of if statements: it lets you list a series of conditions and execute a statement corresponding to the first one that's true. For example, leap years must be divisible by 400, or divisible by 4 and not by 100. Also, remember that case returns the value of the last expression executed.
+
+year = 2000  
+leap = case  
+       when year % 400 == 0 then true  
+       when year % 100 == 0 then false  
+       else year % 4   == 0  
+       end  
+puts leap  
+# output is: true  
+nil is an Object
+
+In Ruby, nil is an actual object. You can call methods on nil, just like any other object. You can add methods to nil, just like any other object.
+
+In Ruby, nil and false evaluate to false, everything else (including true, 0) means true.
+
+Difference between FALSE and NIL
+
+Though we still have to talk about classes, nevertheless here is some additional information for you. nil and false are not the same things. Both have a false value and also remember that everything in Ruby is an object. See the following program:
+
+# We can determine our object's class and its unique object ID  
+# NIL is synonym for nil  
+puts NIL.class # NilClass  
+puts nil.class # NilClass  
+puts nil.object_id # 4  
+  
+# FALSE is synonym for false  
+puts FALSE.class # FalseClass  
+puts false.class # FalseClass  
+puts false.object_id # 0
+
+
+Ruby Blocks
+<Simple Constructs | TOC | Arrays >
+
+
+ 
+Ruby Code blocks (called closures in other languages) are definitely one of the coolest features of Ruby and are chunks of code between braces or between do- end that you can associate with method invocations, almost as if they were parameters. A Ruby block is a way of grouping statements, and may appear only in the source adjacent to a method call; the block is written starting on the same line as the method call's last parameter (or the closing parenthesis of the parameter list). The code in the block is not executed at the time it is encountered. Instead, Ruby remembers the context in which the block appears (the local variables, the current object, and so on) and then enters the method.
+
+The Ruby standard is to use braces for single-line blocks and do- end for multi-line blocks. Keep in mind that the braces syntax has a higher precedence than the do..end syntax. Braces have a high precedence; do has a low precedence. If the method invocation has parameters that are not enclosed in parentheses, the brace form of a block will bind to the last parameter, not to the overall invocation. The do form will bind to the invocation.
+
+Matz says that any method can be called with a block as an implicit argument. Inside the method, you can call the block using the yield keyword with a value.
+
+Also, as you will soon learn, blocks can have their own arguments. There are many methods in Ruby that iterate over a range of values. Most of these iterators are written in such a way as to be able to take a code block as part of their calling syntax. The method can then yield control to the code block (i.e. execute the block) during execution as many times as is necessary for the iteration to complete (e.g. if we are iterating over array values, we can execute the block as many times as there are array values etc.).
+
+Once you have created a block, you can associate it with a call to a method. Usually the code blocks passed into methods are anonymous objects, created on the spot. For example, in the following code, the block containing puts "Hello" is associated with the call to a method greet.
+
+greet {puts 'Hello'}  
+If the method has parameters, they appear before the block.
+
+verbose_greet("PuneRuby") {puts 'Hello'}  
+A method can then invoke an associated block one or more time using the Ruby yield statement. Thus any method that wants to take a block as a parameter can use the yield keyword to execute the block at any time.
+
+Program p022codeblock.rb illustrates what we have just discussed.
+
+=begin  
+  Ruby Code blocks are chunks of code between braces or  
+  between do- end that you can associate with method invocations  
+=end  
+def call_block  
+  puts 'Start of method'  
+  # you can call the block using the yield keyword  
+  yield  
+  yield  
+  puts 'End of method'  
+end  
+# Code blocks may appear only in the source adjacent to a method call  
+call_block {puts 'In the block'}  
+The output is:
+
+>ruby p022codeblock.rb  
+Start of method  
+In the block  
+In the block  
+End of method  
+>Exit code: 0  
+If you provide a code block when you call a method, then inside the method, you can yield control to that code block - suspend execution of the method; execute the code in the block; and return control to the method body, right after the call to yield. If no code block is passed, Ruby raises an exception:
+
+no block given (LocalJumpError)  
+You can provide parameters to the call to yield: these will be passed to the block. Within the block, you list the names of the arguments to receive the parameters between vertical bars (|).
+
+The program p023codeblock2.rb illustrates the same.
+
+# You can provide parameters to the call to yield:  
+# these will be passed to the block  
+def call_block  
+  yield('hello', 99)  
+end  
+call_block {|str, num| puts str + ' ' + num.to_s}  
+The output is:
+
+>ruby p023codeblock2.rb  
+hello 99  
+>Exit code: 0  
+Note that the code in the block is not executed at the time it is encountered by the Ruby interpreter. Instead, Ruby remembers the context in which the block appears and then enters the method.
+
+A code block's return value (like that of a method) is the value of the last expression evaluated in the code block. This return value is made available inside the method; it comes through as the return value of yield.
+
+block_given? returns true if yield would execute a block in the current context. Refer to the following example:
+
+def try  
+  if block_given?  
+    yield  
+  else  
+    puts "no block"  
+  end  
+end  
+try # => "no block"  
+try { puts "hello" } # => "hello"  
+try do puts "hello" end # => "hello"  
+Block Variables
+
+Let us see what happens in the following example when a variable outside a block is x and a block parameter is also named x.
+
+x = 10  
+5.times do |x|  
+  puts "x inside the block: #{x}"  
+end  
+  
+puts "x outside the block: #{x}"  
+The output is:
+
+x inside the block: 0  
+x inside the block: 1  
+x inside the block: 2  
+x inside the block: 3  
+x inside the block: 4  
+x outside the block: 10  
+You will observe that after the block has executed, x outside the block is the original x. Hence the block parameter x was local to the block.
+
+Next observe what happens to x in the following example:
+
+x = 10  
+5.times do |y|  
+  x = y  
+  puts "x inside the block: #{x}"  
+end  
+  
+puts "x outside the block: #{x}"  
+The output is:
+
+x inside the block: 0  
+x inside the block: 1  
+x inside the block: 2  
+x inside the block: 3  
+x inside the block: 4  
+x outside the block: 4  
+Since x is not a block parameter here, the variable x is the same inside and outside the block.
+
+In Ruby 1.9.1, blocks introduce their own scope for the block parameters only. This is illustrated by the following example:
+
+x = 1200  
+puts "Before the loop, x = #{x}"  
+  
+3.times do|y;x|  
+  puts "Looping #{y}"  
+  x = y  
+end  
+  
+puts "After the loop, x = #{x}"  
+The output is:
+
+Before the loop, x = 1200  
+Looping 0  
+Looping 1  
+Looping 2  
+After the loop, x = 1200  
+In the above block, a new feature is being used: block local variable. In short, block local variables shield a block from manipulating variables outside of its scope. This prevents a block from unintentionally clobbering any variables outside its scope. If you don't want to clobber variables, use block local variables for the variables your block creates.
+
+The syntax for a block local variable is simple. Put a semicolon after the normal block parameter list, then list the variable you want as block local variables. For example, if the block takes two variables a and b, and uses to local variables x and y, the parameter list would look like this: |a,b; x,y|.
+
+Ruby Summary
+<Ruby Blocks | TOC | Arrays>
+
+
+ 
+Refer to the String documentation to use the various methods available.
+For double-quoted string literals, Ruby looks for substitutions - sequences that start with a backslash character - and replaces them with some binary value or does expression interpolation ie. within the string, the sequence #{expression} is replaced by the value of the expression.
+It is to be noted that every time a string literal is used in an assignment or as a parameter, a new String object is created.
+Observe how one can list all the methods of a class or object.
+Comparing two strings for equality can be done by == or .eql? (for identical content) and .equal? (for identical objects).
+%w is a common usage in strings.
+Observe the usage of constructs: if else end, while, if elsif end
+Ruby also has a negated form of the if statement, the unless end.
+Case Expressions: This form is fairly close to a series of if statements: it lets you list a series of conditions and execute a statement corresponding to the first one that's true. case returns the value of the last expression executed. Usage: case when else end
+IMPORTANT: Ruby Code blocks are chunks of code between braces or between do- end that you can associate with method invocations.
+Code blocks may appear only in the source adjacent to a method call; the block is written starting on the same line as the method call's last parameter (or the closing parenthesis of the parameter list). The code in the block is not executed at the time it is encountered. Instead, Ruby remembers the context in which the block appears (the local variables, the current object, and so on) and then enters the method.
+The Ruby standard is to use braces for single-line blocks and do- end for multi-line blocks. Keep in mind that the braces syntax has a higher precedence than the do..end syntax.
+Inside a method, you can call a Ruby block using the yield keyword with a value.
+You can provide parameters to the call to yield: these will be passed to the block. Within the block, you list the names of the arguments to receive the parameters between vertical bars (|).
+The do and end identify a block of code that will be executed for each item.
+
+
+Ruby Arrays
+
+
+ 
+
+<Ruby Blocks | TOC | Ranges>
+
+An Array is just a list of items in order (like mangoes, apples, and oranges). Every slot in the list acts like a variable: you can see what object a particular slot points to, and you can make it point to a different object. You can make an array by using square brackets In Ruby, the first value in an array has index 0. The size and length methods return the number of elements in an array. The last element of the array is at index size-1. Negative index values count from the end of the array, so the last element of an array can also be accessed with an index of -1. If you attempt to read an element beyond the end of an array (with an index >= size) or before the beginning of an array (with an index < -size), Ruby simply returns nil and does not throw an exception. Ruby's arrays are mutable - arrays are dynamically resizable; you can append elements to them and they grow as needed. Let us look at the following example p018arrays.rb. Please go through the program carefully.
+
+# p018arrays.rb  
+# Arrays  
+  
+# Empty array  
+var1 = []  
+# Array index starts from 0  
+puts var1[0]  
+  
+# an array holding a single number  
+var2 = [5]  
+puts var2[0]  
+  
+# an array holding two strings  
+var3 = ['Hello', 'Goodbye']  
+puts var3[0]  
+puts var3[1]  
+  
+flavour = 'mango'  
+# an array whose elements are pointing  
+# to three objects - a float, a string and an array  
+var4 = [80.5, flavour, [true, false]]  
+puts var4[2]  
+  
+# a trailing comma is ignored  
+name = ['Satish', 'Talim', 'Ruby', 'Java',]  
+puts name[0]  
+puts name[1]  
+puts name[2]  
+puts name[3]  
+# the next one outputs nil  
+# nil is Ruby's way of saying nothing  
+puts name[4]  
+# we can add more elements too  
+name[4] = 'Pune' 
+puts name[4] 
+# we can add anything! 
+name[5] = 4.33 
+puts name[5] 
+# we can add an array to an array 
+name[6] = [1, 2, 3] 
+puts name[6] 
+ 
+# some methods on arrays 
+newarr = [45, 23, 1, 90] 
+puts newarr.sort 
+puts newarr.length 
+puts newarr.first 
+puts newarr.last 
+ 
+# method each (iterator) - extracts each element into lang 
+# do end is a block of code 
+# we shall talk about blocks soon here - 
+# http://rubylearning.com/satishtalim/ruby_blocks_and_procs.html 
+# variable lang refers to each item in the array as it goes through the loop 
+languages = ['Pune', 'Mumbai', 'Bangalore'] 
+ 
+languages.each do |lang| 
+  puts 'I love ' + lang + '!' 
+  puts 'Don\'t you?'  
+end  
+  
+# delete an entry in the middle and shift the remaining entries  
+languages.delete('Mumbai')  
+languages.each do |lang|  
+  puts 'I love ' + lang + '!'  
+  puts 'Don\'t you?'  
+end  
+The method each (for any object) allows us to do something (whatever we want) to each object the array points to. In the example, we are able to go through each object in the array without using any numbers. Here are a few things to remember:
+
+The variable lang inside the "goalposts" refers to each item in the array as it goes through the loop. You can give this any name you want, but make it memorable.
+The do and end identify a block of code that will be executed for each item. Blocks are used extensively in Ruby.
+Here's an interesting example of a method that returns an array. Example p019mtdarry.rb
+
+# p019mtdarry.rb  
+# if you give return multiple parameters,  
+# the method returns them in an array  
+# The times method of the Integer class iterates block num times,  
+# passing in values from zero to num-1  
+  
+def mtdarry  
+  10.times do |num|  
+    square = num * num  
+    return num, square if num > 5  
+  end  
+end  
+  
+# using parallel assignment to collect the return value  
+num, square = mtdarry  
+puts num  
+puts square  
+The output is:
+
+>ruby p019mtdarry.rb  
+6  
+36  
+>Exit code: 0  
+The times method of the Integer class iterates block num times, passing in values from zero to num-1. As we can see, if you give return multiple parameters, the method returns them in an array. You can use parallel assignment to collect this return value.
+
+Parallel Assignment
+
+To explain this, we'll use the terms lvalue and rvalue. An lvalue is something that can appear on its own on the left-hand side of an assignment (a variable, constant, or attribute setter method). An rvalue is something that can appear on its own on the right hand side. Ruby lets you have a comma-separated list of rvalues. Once Ruby sees more than one rvalue in an assignment, the rules of parallel assignment come into play. First, all the rvalues evaluated, left to right, and collected into an array (unless they are already an array). This array will be the eventual value returned by the overall assignment. Next, the left hand side (lhs) is inspected. If it contains a single element, the array is assigned to that element.
+
+a = 1, 2, 3, 4 # => a == [1, 2, 3, 4]  
+b = [1, 2, 3, 4] # => b == [1, 2, 3, 4]  
+If the lhs contains a comma, Ruby matches values on the rhs against successive elements on the lhs. Excess elements are discarded.
+
+a, b = 1, 2, 3, 4 # => a == 1, b == 2  
+c, = 1, 2, 3, 4 # => c == 1  
+Environment Variables
+
+An environment variable is a link between our program and the outside world. An environment variable is essentially a label referring to a piece of text; and can be used to store configuration information such as paths, usernames, and so on. You can access operating system environment variables using the predefined variable ENV.
+
+ENV.each {|k,v| puts "#{k}: #{v}"}  
+Ruby sets ENV to the environment variables. After that, iteration proceeds with each. This time, the block takes two parameters: k (key) and v (value). Blocks are a completely general mechanism and can take any number of arguments.
+
+The values of some environment variables are read by Ruby when it first starts. These variables modify the behavior of the interpreter, as shown below.
+
+
+
+A Ruby program may write to the ENV object. On most systems this changes the values of the corresponding environment variables. However, this change is local to the process that makes it and to any subsequently spawned child processes. A subprocess changes an environment variable, and this change is inherited by a process that it then starts. However, the change is not visible to the original parent. (This just goes to prove that parents never really know what their children are doing.)
+
+ENV["course"] = "FORPC101"  
+puts "#{ENV['course']}"  
+Command-line arguments
+
+If you're starting a program from the command line, you can append parameters onto the end of the command and the program processes them.
+
+You can do the same with your Ruby application. Ruby automatically places any parameters that are appended to the command line when you launch your Ruby program into a special array called ARGV. If your program is:
+
+f = ARGV[0]  
+puts f  
+You can execute this program from the command line as:
+
+ruby tmp.rb 23  
+The program should display 23.
+
+Library GetoptLong
+
+Class GetoptLong supports command-line option parsing. Options may be a minus sign (-) followed by a single character, or two minus signs (--) followed by a name (a long option). Options may be given in any order. A single internal option may have multiple external representations. For example, the option to control verbose output could be any of -v, --verbose, or --details. Some options may also take an associated value. Each internal option is passed to GetoptLong as an array, containing strings representing the option's external forms and a flag. The flag specifies how GetoptLong is to associate an argument with the option (NO_ARGUMENT, REQUIRED_ARGUMENT, or OPTIONAL_ARGUMENT).
+
+Suppose I want to call a Ruby program as:
+
+ruby tsftpc.rb -hftp.ibiblio.org -n21 -uanonymous -ps@s.com  
+Here's the code to do so:
+
+require 'getoptlong'  
+  
+# Call using "ruby tsftpc.rb -hftp.ibiblio.org -n21 -uanonymous -ps@s.com"  
+# The parameters can be in any order  
+unless ARGV.length == 4  
+  puts "Usage: ruby tsftpc.rb -hftp_site_url -nport_no -uuser_name -ppassword"  
+  exit  
+end  
+  
+host_name = port_no = user_name = password = ''  
+# specify the options we accept and initialize  
+# the option parser  
+opts = GetoptLong.new(  
+[ "--hostname", "-h", GetoptLong::REQUIRED_ARGUMENT ],  
+[ "--port", "-n", GetoptLong::REQUIRED_ARGUMENT ],  
+[ "--username", "-u", GetoptLong::REQUIRED_ARGUMENT ],  
+[ "--pass", "-p", GetoptLong::REQUIRED_ARGUMENT ]  
+)  
+# process the parsed options  
+opts.each do |opt, arg|  
+  case opt  
+    when '--hostname'  
+      host_name = arg  
+    when '--port'  
+      port_no = arg  
+    when '--username'  
+      user_name = arg  
+    when '--pass'  
+      password = arg  
+  end  
+end  
+require gives you access to the many extensions and programming libraries bundled with the Ruby programming language-as well as an even larger number of extensions and libraries written independently by other programmers and made available for use with Ruby. We shall be studying require in more detail, later on. Also, later on, we shall study how to access constants using ::
+
+How do I convert objects into an Array? If you want to wrap objects in an Array, you can use a special Kernel module Array method (that starts with a capital letter and looks like a class). This special method converts its argument into an array. For example:
+
+str = 'hello'  
+print Array(str).class # Array  
+Another example:
+
+str = 'hello\nworld'  
+print Array(str) # ["hello\\nworld"]  
+What are the ancestors of Array? Run the following program, to find that out:
+
+a = [1,2,3,4]  
+print a.class.ancestors  
+You should see:
+
+[Array, Enumerable, Object, Kernel, BasicObject]
+
+
+Ranges in Ruby
+
+
+ 
+
+<Arrays | TOC | Symbols>
+
+The first and perhaps most natural use of ranges is to express a sequence. Sequences have a start point, an end point, and a way to produce successive values in the sequence. In Ruby, these sequences are created using the ".." and "..." range operators. The two dot form creates an inclusive range, and the three-dot form creates a range that excludes the specified high value. In Ruby ranges are not represented internally as lists: the sequence 1..100000 is held as a Range object containing references to two Fixnum objects. Refer program p021ranges.rb. If you need to, you can convert a range to a list using the to_a method.
+
+(1..10).to_a -> [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]  
+Ranges implement methods that let you iterate over them and test their contents in a variety of ways.
+
+# p021ranges.rb  
+=begin  
+  Sequences have a start point, an end point, and a way to  
+  produce successive values in the sequence  
+  In Ruby, sequences are created using the ".." and "..."  
+  range operators.  
+  The two dot form creates an inclusive range.  
+  The three-dot form creates a  range that excludes the specified  
+  high value  
+  The sequence 1..100000 is held as a Range object  
+=end  
+digits = -1..9  
+puts digits.include?(5)          # true  
+puts digits.min                  # -1  
+puts digits.max                  # 9  
+puts digits.reject {|i| i < 5 }  # [5, 6, 7, 8, 9]  
+Another use of the versatile range is as an interval test: seeing if some value falls within the interval represented by the range. We do this using ===, the case equality operator.
+
+(1..10) === 5       -> true  
+(1..10) === 15      -> false  
+(1..10) === 3.14159 -> true  
+('a'..'j') === 'c'  -> true  
+('a'..'j') === 'z'  -> false
+
+Ruby Symbols
+
+
+ 
+
+<Ranges | TOC | Hashes>
+
+A symbol looks like a variable name but it's prefixed with a colon. Examples - :action, :line_items. You don't have to pre-declare a symbol and they are guaranteed to be unique. There's no need to assign some kind of value to a symbol - Ruby takes care of that for you. Ruby also guarantees that no matter where it appears in your program, a particular symbol will have the same value.
+
+Alternatively, you can consider the colon to mean "thing named" so :id is "the thing named id." You can also think of :id as meaning the name of the variable id, and plain id as meaning the value of the variable.
+
+A Symbol is the most basic Ruby object you can create. It's just a name and an internal ID. Symbols are useful because a given symbol name refers to the same object throughout a Ruby program. Symbols are more efficient than strings. Two strings with the same contents are two different objects, but for any given name there is only one Symbol object. This can save both time and memory.
+
+Refer the example: p039symbol.rb below
+
+# p039symbol.rb  
+# use the object_id method of class Object  
+# it returns an integer identifier for an object  
+puts "string".object_id  
+puts "string".object_id  
+puts :symbol.object_id  
+puts :symbol.object_id  
+The output when I ran the program on my PC was:
+
+>ruby p039symbol.rb  
+21066960  
+21066930  
+132178  
+132178  
+>Exit code: 0  
+Therefore, when do we use a string versus a symbol?
+
+If the contents (the sequence of characters) of the object are important, use a string
+If the identity of the object is important, use a symbol
+Ruby uses symbols, and maintains a Symbol Table to hold them. Symbols are names - names of instance variables, names of methods, names of classes. So if there is a method called control_movie, there is automatically a symbol :control_movie. Ruby's interpreted, so it keeps its Symbol Table handy at all times. You can find out what's on it at any given moment by calling Symbol.all_symbols.
+
+A Symbol object is created by prefixing an operator, string, variable, constant, method, class, module name with a colon. The symbol object will be unique for each different name but does not refer to a particular instance of the name, for the duration of a program's execution. Thus, if Fred is a constant in one context, a method in another, and a class in a third, the Symbol :Fred will be the same object in all three contexts.
+
+This can be illustrated by this simple program - p039xsymbol.rb:
+
+# p039xsymbol.rb  
+class Test  
+  puts :Test.object_id.to_s  
+  def test  
+    puts :test.object_id.to_s  
+    @test = 10  
+    puts :test.object_id.to_s  
+  end  
+end  
+t = Test.new  
+t.test  
+The output when I ran the program on my PC was:
+
+>ruby p039xsymbol.rb  
+116458  
+79218  
+79218  
+>Exit code: 0  
+Here is another example - p039xysymbol.rb:
+
+# p039xysymbol.rb  
+know_ruby = :yes  
+if know_ruby == :yes  
+  puts 'You are a Rubyist'  
+else  
+  puts 'Start learning Ruby'  
+end  
+The output is:
+
+>ruby p039xysymbol.rb  
+You are a Rubyist  
+>Exit code: 0  
+In this example, :yes is a symbol. Symbols don't contain values or objects, like variables do. Instead, they're used as a consistent name within code. For example, in the preceding code you could easily replace the symbol with a string, as in example - p039xyzsymbol.rb
+
+# p039xyzsymbol.rb  
+know_ruby = 'yes'  
+if know_ruby == 'yes'  
+  puts 'You are a Rubyist'  
+else  
+  puts 'Start learning Ruby'  
+end  
+This gives the same result, but isn't as efficient. In this example, every mention of 'yes' creates a new object stored separately in memory, whereas symbols are single reference values that are only initialized once. In the first code example, only :yes exists, whereas in the second example you end up with the full strings of 'yes' and 'yes' taking up memory.
+
+We can also transform a String into a Symbol and vice-versa:
+
+puts "string".to_sym.class # Symbol  
+puts :symbol.to_s.class    # String  
+Symbols are particularly useful when creating hashes and you want to have a distinction between keys and values. Please refer to Using Symbols as Hash Keys for a practical example.
+
+
+Ruby Hashes
+
+
+ 
+
+<Symbols | TOC | Random Numbers>
+
+Hashes (sometimes known as associative arrays, maps, or dictionaries) are similar to arrays in that they are indexed collection of object references. However, while you index arrays with integers, you can index a hash with objects of any types: strings, regular expressions, and so on. When you store a value in a hash, you actually supply two objects - the index (normally called the key) and the value. You can subsequently retrieve the value by indexing the hash with the same key. The values in a hash can be objects of any type.
+
+The example p040myhash.rb below, uses hash literals: a list of key => value pairs between braces.
+
+# p040myhash.rb  
+h = {'dog' => 'canine', 'cat' => 'feline', 'donkey' => 'asinine', 12 => 'dodecine'}  
+puts h.length  # 4  
+puts h['dog']  # 'canine'  
+puts h  
+puts h[12]  
+The output is:
+
+>ruby p040myhash.rb  
+4  
+canine  
+{"dog"=>"canine", "cat"=>"feline", "donkey"=>"asinine", 12=>"dodecine"}  
+dodecine  
+>Exit code: 0  
+Compared with arrays, hashes have one significant advantage: they can use any object as an index.
+
+Hashes have a default value. This value is returned when an attempt is made to access keys that do not exist in the hash. By default this value is nil.
+
+The Hash class has many methods and you can refer them here.
+
+Using Symbols as Hash Keys
+
+Whenever you would otherwise use a quoted string, use a symbol instead. See the following example p041symbolhash.rb
+
+# p041symbolhash.rb  
+people = Hash.new  
+people[:nickname] = 'IndianGuru'  
+people[:language] = 'Marathi'  
+people[:lastname] = 'Talim'  
+  
+puts people[:lastname] # Talim  
+Another example is p0411symbolhash.rb
+
+# p0411symbolhash.rb  
+h = {:nickname => 'IndianGuru', :language => 'Marathi', :lastname => 'Talim'}  
+puts h  
+The output is:
+
+{:nickname=>"IndianGuru", :language=>"Marathi", :lastname=>"Talim"}  
+Another way (using name: value pairs to create a hash if the keys are symbols) of doing the same thing is as shown in p0412symbolhash.rb
+
+# p0412symbolhash.rb  
+h = {nickname: 'IndianGuru', language: 'Marathi', lastname: 'Talim'}  
+puts h  
+The output is:
+
+{:nickname=>"IndianGuru", :language=>"Marathi", :lastname=>"Talim"}  
+Exactly the same as in p0411symbolhash.rb
+
+
+Random Numbers
+
+
+ 
+
+<Hashes | TOC | Read/Write Files>
+
+Ruby comes with a random number generator. The method to get a randomly chosen number is rand. If you call rand, you'll get a float greater than or equal to 0.0 and less than 1.0. If you give it an integer parameter (by calling rand(5) ), you will get an integer value greater than or equal to 0 and less than 5.
+Here's an example: p026phrase.rb
+
+# p026phrase.rb  
+=begin  
+  If you call rand, you'll get a float greater than or equal to 0.0 
+  and less than 1.0. If you give it an integer parameter (by calling rand(5) ), 
+  you will get an integer value greater than or equal to 0 and less than 5 
+=end 
+ 
+# The program below makes three lists of words, and then randomly picks one word 
+# from each of the three lists and prints out the result 
+word_list_one = ['24/7', 'multi-Tier', '30,000 foot', 'B-to-B', 'win-win', 'front-end', 
+                 'web-based', 'pervasive', 'smart', 'six-sigma', 'critical-path', 'dynamic'] 
+word_list_two = ['empowered', 'sticky', 'value-added', 'oriented', 'centric', 'distributed', 
+                 'clustered', 'branded', 'outside-the-box', 'positioned', 'networked', 'focused', 
+                 'leveraged', 'aligned', 'targeted', 'shared', 'cooperative', 'accelerated'] 
+word_list_three = ['process', 'tipping-point', 'solution', 'architecture', 'core competency', 
+                   'strategy', 'mindshare', 'portal', 'space', 'vision', 'paradigm', 'mission']  
+  
+one_len = word_list_one.length  
+two_len = word_list_two.length  
+three_len = word_list_three.length  
+  
+rand1 = rand(one_len)  
+rand2 = rand(two_len)  
+rand3 = rand(three_len)  
+  
+phrase = word_list_one[rand1] + " " + word_list_two[rand2] + " " + word_list_three[rand3]  
+  
+puts phrase  
+The above program makes three lists of words, and then randomly picks one word from each of the three lists and prints out the result.
+
+Read/Write Text Files
+
+
+ 
+
+<Random Numbers | TOC | Regular Expressions>
+
+Let's look at how we can read / write to a text file with the help of a simple program p027readwrite.rb
+
+# p027readwrite.rb  
+# Open and read from a text file  
+# Note that since a block is given, file will  
+# automatically be closed when the block terminates  
+File.open('p014constructs.rb', 'r') do |f1|  
+  while line = f1.gets  
+    puts line  
+  end  
+end  
+  
+# Create a new file and write to it  
+File.open('test.rb', 'w') do |f2|  
+  # use "\n" for two lines of text  
+  f2.puts "Created by Satish\nThank God!"  
+end  
+The File.open method can open the file in different modes like 'r' Read-only, starts at beginning of file (default); 'r+' Read/Write, starts at beginning of file; 'w' Write-only, truncates existing file to zero length or creates a new file for writing. Please check the online documentation for a full list of modes available. File.open opens a new File if there is no associated block. If the optional block is given, it will be passed file as an argument, and the file will automatically be closed when the block terminates. Always close a file that you open. In the case of a file open for writing, this is very important and can actually prevent lost data.
+
+File implements a readlines method that reads an entire file into an array, line by line.
+
+Both class methods open and readlines belong to the IO class, whose sub-class is File. We have not done classes, objects, inheritance yet but for the record these two methods are inherited by the sub-class File from the class IO.
+
+Traversing Directory Trees
+
+The Find module supports top-down traversal of a set of file paths, given as arguments to the find method. If an argument is a directory, then its name and name of all its files and sub-directories will be passed in (in the example below, this would be from where you run this program).
+
+require 'find'  
+Find.find('./') do |f|  
+  type = case  
+         when File.file?(f) then "F"  
+         when File.directory?(f) then "D"  
+         else "?"  
+         end  
+  puts "#{type}: #{f}"  
+end  
+We shall talk about require soon here.
+
+Random Access
+
+It's quite easy to access a file randomly. Let's say we have a text file (named hellousa.rb), the contents of which is shown below:
+
+puts 'Hello USA'  
+We now need to display the contents of the file from the word USA. Here's how - program p028xrandom.rb:
+
+# p028xrandom.rb  
+# We now need to display the contents of the file from the word USA  
+f = File.new("hellousa.rb")  
+  
+# SEEK_CUR - Seeks to first integer number parameter plus current position  
+# SEEK_END - Seeks to first integer number parameter plus end of stream  
+#   (you probably want a negative value for first integer number parameter)  
+# SEEK_SET - Seeks to the absolute location given by first integer number parameter  
+# :: is the scope operator - more on this later  
+f.seek(12, IO::SEEK_SET)  
+print f.readline  
+f.close  
+The output is:
+
+>ruby p028xrandom.rb  
+USA'  
+>Exit code: 0  
+Ruby supports the notion of a file pointer. The file pointer indicates the current location in the file. The File.new method opens the file 'hellousa.rb' in read-only mode (default mode), returns a new File object and the file pointer is positioned at the beginning of the file. In the above program, the next statement is f.seek(12, IO::SEEK_SET). The seek method of class IO, moves the file pointer to a given integer distance (first parameter of seek method) in the stream according to the value of the second parameter in the seek method.
+
+IO::SEEK_CUR - Seeks to first integer number parameter plus current position
+IO::SEEK_END - Seeks to first integer number parameter plus end of stream (you probably want a negative value for first integer number parameter)
+IO::SEEK_SET - Seeks to the absolute location given by first integer number parameter
+More on the scope operator :: here.
+
+Does Ruby allow Object Serialization?
+
+Java features the ability to serialize objects, letting you store them somewhere and reconstitute them when needed. Ruby calls this kind of serialization marshaling. Saving an object and some or all of its components is done using the method Marshal.dump. Later on you can reconstitute the object using Marshal.load. Ruby uses marshaling to store session data. Refer topic Object Serialization later on.
+
+Ruby Summary
+<Read/Write Files | TOC | Regular Expressions>
+
+
+ 
+An Array is just a list of items in order. Every slot in the list acts like a variable: you can see what object a particular slot points to, and you can make it point to a different object. You can make an array by using square brackets.
+Arrays are indexed by integers and the index starts from 0.
+A trailing comma in an array declaration is ignored.
+You can access an array beyond its boundary limits; it will return nil.
+We can add more elements to an existing array.
+Refer to the Array documentation for a list of methods.
+The method each (for any object) is an iterator that extracts each element of the array. The method each allows us to do something (whatever we want) to each object the array points to.
+The variable inside the "goalposts" ie. | | refers to each item in the array as it goes through the loop. You can give this any name you want.
+Sequences have a start point, an end point, and a way to produce successive values in the sequence. In Ruby, these sequences are created using the ".." and "..." range operators.
+The two dot form creates an inclusive range, and the three-dot form creates a range that excludes the specified high value.
+In Ruby, the sequence 1..100000 is held as a Range object containing references to two Fixnum objects.
+The .to_a method converts a Range to an Array.
+Another use of the versatile range is as an interval test: seeing if some value falls within the interval represented by the range. We do this using ===, the case equality operator.
+Ranges are not limited to integers or numbers. The beginning and end of a range may be any Ruby object.
+A symbol looks like a variable name but it's prefixed with a colon.
+You can think of :id as meaning the name of the variable id, and plain id as meaning the value of the variable.
+Symbols are useful because a given symbol name refers to the same object throughout a Ruby program.
+Symbols can be considered constants without values.
+Symbols are more efficient than strings. Two strings with the same contents are two different objects, but for any given name there is only one Symbol object. This can save both time and memory.
+When do we use a string versus a symbol?
+If the contents (the sequence of characters) of the object are important, use a string.
+If the identity of the object is important, use a symbol.
+A Symbol object is created by prefixing an operator, string, variable, constant, method, class, module name with a colon.
+If Fred is a constant in one context, a method in another, and a class in a third, the Symbol :Fred will be the same object in all three contexts.
+Hashes are similar to arrays in that they are indexed collection of object references. However, while you index arrays with integers, you can index a hash with objects of any types: strings, regular expressions, and so on.
+When you store a value in a hash, you actually supply two objects - the index (normally called the key) and the value.
+nil is returned when an attempt is made to access keys that do not exist in the hash.
+The method to get a randomly chosen number in Ruby is rand.
+If you call rand, you'll get a float greater than or equal to 0.0 and less than 1.0. If you give it an integer parameter (by calling rand(5) ), you will get an integer value greater than or equal to 0 and less than 5.
+The File.open method can open a file in different modes like 'r' Read-only, starts at beginning of file (default); 'r+' Read/Write, starts at beginning of file; 'w' Write-only, truncates existing file to zero length or creates a new file for writing.
+File.open opens a new File if there is no associated block. If the optional block is given, it will be passed file as an argument, and the file will automatically be closed when the block terminates.
+Always close a file that you open. In the case of a file open for writing, this is very important and can actually prevent lost data.
+The seek method of class IO, seeks to a given offset an Integer (first parameter of method) in the stream according to the value of second parameter in the method. The second parameter can be IO::SEEK_CUR - Seeks to first integer number parameter plus current position; IO::SEEK_END - Seeks to first integer number parameter plus end of stream (you probably want a negative value for first integer number parameter); IO::SEEK_SET - Seeks to the absolute location given by first integer number parameter.
+
+
+Regular Expressions
+
+
+ 
+
+<Read/Write Files | TOC | Writing Own Class >
+
+Regular expressions, though cryptic, is a powerful tool for working with text. Ruby has this feature built-in. It's used for pattern-matching and text processing.
+
+Many people find regular expressions difficult to use, difficult to read, un-maintainable, and ultimately counterproductive. You may end up using only a modest number of regular expressions in your Ruby and Rails applications. Becoming a regular expression wizard isn't a prerequisite for Rails programming. However, it's advisable to learn at least the basics of how regular expressions work.
+
+A regular expression is simply a way of specifying a pattern of characters to be matched in a string. In Ruby, you typically create a regular expression by writing a pattern between slash characters (/pattern/). In Ruby, regular expressions are objects (of type Regexp) and can be manipulated as such. // is a regular expression and an instance of the Regexp class, as shown below:
+
+//.class    # Regexp  
+You could write a pattern that matches a string containing the text Pune or the text Ruby using the following regular expression:
+
+/Pune|Ruby/  
+The forward slashes delimit the pattern, which consists of the two things we are matching, separated by a pipe character (|). The pipe character means "either the thing on the right or the thing on the left," in this case Pune or Ruby.
+
+The simplest way to find out whether there's a match between a pattern and a string is with the match method. You can do this in either direction: Regular expression objects and string objects both respond to match. If there's no match, you get back nil. If there's a match, it returns an instance of the class MatchData. We can also use the match operator =~ to match a string against a regular expression. If the pattern is found in the string, =~ returns its starting position, otherwise it returns nil.
+
+m1 = /Ruby/.match("The future is Ruby")  
+puts m1.class  # it returns MatchData  
+m2 = "The future is Ruby" =~ /Ruby/  
+puts m2          # it returns 14  
+The possible components of a regular expression include the following:
+
+Literal characters
+
+Any literal character you put in a regular expression matches itself in the string.
+
+/a/  
+This regular expression matches the string "a", as well as any string containing the letter "a".
+
+Some characters have special meanings to the regexp parser. When you want to match one of these special characters as itself, you have to escape it with a backslash (\). For example, to match the character ? (question mark), you have to write this:
+
+/\?/  
+The backslash means "don't treat the next character as special; treat it as itself."
+
+The special characters include ^, $, ? , ., /, \, [, ], {, }, (, ), +, and *.
+
+The wildcard character . (dot)
+
+Sometimes you'll want to match any character at some point in your pattern. You do this with the special wildcard character . (dot). A dot matches any character with the exception of a newline. This regular expression:
+
+/.ejected/  
+matches both "dejected" and "rejected". It also matches "%ejected" and "8ejected". The wildcard dot is handy, but sometimes it gives you more matches than you want. However, you can impose constraints on matches while still allowing for multiple possible strings, using character classes.
+
+Character classes
+
+A character class is an explicit list of characters, placed inside the regular expression in square brackets:
+
+/[dr]ejected/  
+This means "match either d or r, followed by ejected. This new pattern matches either "dejected" or "rejected" but not "&ejected". A character class is a kind of quasi-wildcard: It allows for multiple possible characters, but only a limited number of them.
+
+Inside a character class, you can also insert a range of characters. A common case is this, for lowercase letters:
+
+/[a-z]/  
+To match a hexadecimal digit, you might use several ranges inside a character class:
+
+/[A-Fa-f0-9]/  
+This matches any character a through f (upper- or lowercase) or any digit.
+
+Sometimes you need to match any character except those on a special list. You may, for example, be looking for the first character in a string that is not a valid hexadecimal digit.
+
+You perform this kind of negative search by negating a character class. To do so, you put a caret (^) at the beginning of the class. Here's the character class that matches any character except a valid hexadecimal digit:
+
+/[^A-Fa-f0-9]/  
+Some character classes are so common that they have special abbreviations.
+
+Special escape sequences for common character classes
+
+To match any digit, you can do this:
+
+/[0-9]/  
+But you can also accomplish the same thing more concisely with the special escape sequence \d:
+
+/\d/  
+Two other useful escape sequences for predefined character classes are these:
+\w matches any digit, alphabetical character, or underscore (_).
+\s matches any whitespace character (space, tab, newline).
+
+Each of these predefined character classes also has a negated form. You can match any character that is not a digit by doing this:
+
+/\D/  
+Similarly, \W matches any character other than an alphanumeric character or underscore, and \S matches any non-whitespace character.
+
+A successful match returns a MatchData object.
+
+Every match operation either succeeds or fails. Let's start with the simpler case: failure. When you try to match a string to a pattern, and the string doesn't match, the result is always nil:
+
+/a/.match("b") # nil  
+This nil stands in for the false or no answer when you treat the match as a true/false test.
+
+Unlike nil, the MatchData object returned by a successful match has a Boolean value of true, which makes it handy for simple match/no-match tests. Beyond this, however, it also stores information about the match, which you can pry out of them with the appropriate methods: where the match began (at what character in the string), how much of the string it covered, what was captured in the parenthetical groups, and so forth.
+
+To use the MatchData object, you must first save it. Consider an example where we want to pluck a phone number from a string and save the various parts of it (area code, exchange, number) in groupings. Example p064regexp.rb
+
+# p064regexp.rb  
+string = "My phone number is (123) 555-1234."  
+phone_re = /\((\d{3})\)\s+(\d{3})-(\d{4})/  
+m = phone_re.match(string)  
+unless m  
+  puts "There was no match..."  
+  exit  
+end  
+print "The whole string we started with: "  
+puts m.string  
+print "The entire part of the string that matched: "  
+puts m[0]  
+puts "The three captures: "  
+3.times do |index|  
+  puts "Capture ##{index + 1}: #{m.captures[index]}"  
+end  
+puts "Here's another way to get at the first capture:"  
+print "Capture #1: "  
+puts m[1]  
+In this code, we use the string method of MatchData (puts m.string) to get the entire string on which the match operation was performed. To get the part of the string that matched our pattern, we address the MatchData object with square brackets, with an index of 0 (puts m[0]). We also use the times method (3.times do |index|) to iterate exactly three times through a code block and print out the submatches (the parenthetical captures) in succession. Inside that code block, a method called captures fishes out the substrings that matched the parenthesized parts of the pattern. Finally, we take another look at the first capture, this time through a different technique: indexing the MatchData object directly with square brackets and positive integers, each integer corresponding to a capture.
+
+Here's the output:
+
+>ruby p064regexp.rb  
+The whole string we started with: My phone number is (123) 555-1234.  
+The entire part of the string that matched: (123) 555-1234  
+The three captures:  
+Capture #1: 123  
+Capture #2: 555  
+Capture #3: 1234  
+Here's another way to get at the first capture:  
+Capture #1: 123  
+>Exit code: 0
+
+Writing our own Class in Ruby
+<Regular Expressions | TOC | Method Missing>
+
+
+ 
+So far, the procedural style of programming (this continues to be used in languages such as C) was used to write our programs. Programming procedurally means you focus on the steps required to complete a task without paying particular attention to how the data is managed.
+
+In the Object-Orientation style, objects are your agents, your proxies, in the universe of your program. You ask them for information. You assign them tasks to accomplish. You tell them to perform calculations and report back to you. You hand them to each other and get them to work together.
+
+When you design a class, think about the objects that will be created from that class type. Think about the things the object knows and the things the object does.
+
+Things an object knows about itself are called instance variables. They represent an object's state (the data - for example, the quantity and the product id), and can have unique values for each object of that type.
+
+Things an object can do are called methods.
+
+An object is an entity that serves as a container for data and also controls access to the data. Associated with an object is a set of attributes, which are essentially no more than variables belonging to that object. Also associated with an object is a set of functions that provide an interface to the functionality of the object, called methods. - Hal Fulton
+
+An object is a combination of state and methods that use the state.
+
+Hence a class is used to construct an object. A class is a blueprint for an object. For example, you might use a Button class to make dozens of different buttons, and each button might have its own color, size, shape, label, and so on. An object is an instance of a class.
+
+Read this very carefully, it's a brain bender!
+Classes in Ruby are first-class objects - each is an instance of class Class. When a new class is defined (typically using class Name ... end), an object of type Class is created and assigned to a constant (Name. in this case). When Name.new is called to create a new object, the new class method in Class is run by default, which in turn invokes allocate to allocate memory for the object, before finally calling the new object's initialize method. The constructing and initializing phases of an object are separate and both can be over-ridden. The initialization is done via the initialize instance method while the construction is done via the new class method. initialize is not a constructor!
+
+The following Class Hierarchy is informative.
+
+Let's write our first, simple class - p029dog.rb
+
+# p029dog.rb  
+# define class Dog  
+class Dog  
+  def initialize(breed, name)  
+    # Instance variables  
+    @breed = breed  
+    @name = name  
+  end  
+  
+  def bark  
+    puts 'Ruff! Ruff!'  
+  end  
+  
+  def display  
+    puts "I am of #{@breed} breed and my name is #{@name}"  
+  end  
+end  
+  
+# make an object  
+# Objects are created on the heap  
+d = Dog.new('Labrador', 'Benzy')  
+  
+=begin  
+  Every object is "born" with certain innate abilities.  
+  To see a list of innate methods, you can call the methods  
+  method (and throw in a sort operation, to make it  
+  easier to browse visually). Remove the comment and execute.  
+=end  
+# puts d.methods.sort  
+  
+# Amongst these many methods, the methods object_id and respond_to? are important.  
+# Every object in Ruby has a unique id number associated with it  
+puts "The id of obj is #{d.object_id}."  
+  
+# To know whether the object knows how to handle the message you want  
+# to send it, by using the respond_to? method.  
+if d.respond_to?("talk")  
+  d.talk  
+else  
+  puts "Sorry, the object doesn't understand the 'talk' message."  
+end  
+  
+d.bark  
+d.display  
+  
+# making d and d1 point to the same object  
+d1 = d  
+d1.display  
+  
+# making d a nil reference, meaning it does not refer to anything  
+d = nil  
+d.display  
+  
+# If I now say  
+d1 = nil  
+# then the Dog object is abandoned and eligible for Garbage Collection (GC)  
+The output is:
+
+>ruby p029dog.rb  
+The id of obj is 22982920.  
+Sorry, the object doesn't understand the 'talk' message.  
+Ruff! Ruff!  
+I am of Labrador breed and my name is Benzy  
+I am of Labrador breed and my name is Benzy  
+>Exit code: 0  
+The method new is used to create an object of class Dog. Objects are created on the heap. The variable d is known as a reference variable. It does not hold the object itself, but it holds something like a pointer or an address of the object. You use the dot operator (.) on a reference variable to say, "use the thing before the dot to get me the thing after the dot." For example:
+d.bark
+
+IN RAILS: If you're writing a Rails application in which one of your entity models is, say, Customer, then when you write the code that causes things to happen - a customer logging into a site, updating a customer's phone number, adding an item to a customer's shopping cart - in all likelihood you'll be sending messages to customer objects.
+
+Even a newly created object isn't a blank slate. As soon as an object comes into existence, it already responds to a number of messages. Every object is "born" with certain innate abilities. To see a list of innate methods, you can call the methods method (and throw in a sort operation, to make it easier to browse visually):
+puts d.methods.sort
+The result is a list of all the messages (methods) this newly minted object comes bundled with. Amongst these many methods, the methods object_id and respond_to? are important.
+
+Every object in Ruby has a unique id number associated with it. You can see an object's id by asking the object to show you its object_id:
+puts "The id of obj is #{d.object_id}."
+
+You can determine in advance (before you ask the object to do something) whether the object knows how to handle the message you want to send it, by using the respond_to? method. This method exists for all objects; you can ask any object whether it responds to any message. respond_to? usually appears in connection with conditional (if) logic.
+
+if d.respond_to?("talk")  
+  d.talk  
+else  
+  puts "Sorry, the object doesn't understand the 'talk' message."  
+end  
+Now, the statements:
+d1 = d
+d1.display
+makes d and d1 point to the same object.
+
+You can ask any object of which class it's a member by using its Object.class method. In the above program, if we write the statement:
+
+d = Dog.new('Alsatian', 'Lassie')  
+puts d.class.to_s  
+The output is:
+
+>ruby p029dog.rb  
+Dog  
+>Exit code: 0  
+instance_of? returns true if object is an instance of the given class, as in this example:
+
+num = 10  
+puts(num.instance_of? Fixnum) # output true  
+Literal Constructors
+
+That means you can use special notation, instead of a call to new, to create a new object of that class. The classes with literal constructors are shown in the table below. When you use one of these literal constructors, you bring a new object into existence
+
+Examples:
+
+String - 'hello' or "hello"
+Symbol - :symbol or :"hello wrold"
+Array - [x, y, z]
+Hash - {"India" => "IN"}
+Range - 3..7 or 3...7
+
+Garbage Collection
+
+The statement:
+d =nil
+makes d a nil reference, meaning it does not refer to anything. If I now say:
+d1 = nil
+then the Dog object is abandoned and eligible for Garbage Collection (GC). The Ruby object heap allocates a minimum of 8 megabytes. Ruby's GC is called mark-and-sweep. The "mark" stage checks objects to see if they are still in use. If an object is in a variable that can still be used in the current scope, the object (and any object inside that object) is marked for keeping. If the variable is long gone, off in another method, the object isn't marked. The "sweep" stage then frees objects which haven't been marked.
+
+Ruby uses a conservative mark-and-sweep GC mechanism. There is no guarantee that an object will undergo garbage collection before the program terminates.
+
+If you stuff something in an array and you happen to keep that array around, it's all marked. If you stuff something in a constant or global variable, it's forever marked.
+
+Class Methods
+
+The idea of a class method is that you send a message to the object that is the class rather than to one of the class's instances. Class methods serve a purpose. Some operations pertaining to a class can't be performed by individual instances of that class. new is an excellent example. We call Dog.new because, until we've created an individual dog instance, we can't send it any messages! Besides, the job of spawning a new object logically belongs to the class. It doesn't make sense for instances of Dog to spawn each other. It does make sense, however, for the instance-creation process to be centralized as an activity of the class Dog. It's vital to understand that by Dog.new, we have a method that we can access through the class object Dog but not through its instances. Individual dog objects (instances of the class Dog) do not have this method. A class object (like Dog) has its own methods, its own state, its own identity. It doesn't share these things with instances of itself.
+
+Here's an example:
+
+Dog#bark - the instance method bark in the class Dog
+Dog.color - the class method color, in the class Dog
+Dog::color - another way to refer to the class method color
+
+In writing about Ruby, the pound notation (#) is sometimes used to indicate an instance method - for example, we say File.chmod to denote the class method chmod of class File, and File#chmod to denote the instance method that has the same name. This notation is not part of Ruby syntax.
+
+Ruby Method Missing
+
+
+ 
+
+<Writing own own class | TOC | Ruby Procs>
+
+When you send a message to an object, the object executes the first method it finds on its method lookup path with the same name as the message. If it fails to find any such method, it raises a NoMethodError exception - unless you have provided the object with a method called method_missing. The method_missing method is passed the symbol of the non-existent method, an array of the arguments that were passed in the original call and any block passed to the original method.
+
+method_missing is in part a safety net: It gives you a way to intercept unanswerable messages and handle them gracefully. See the example - p012zmm.rb below.
+
+class Dummy  
+  def method_missing(m, *args, &block)  
+    puts "There's no method called #{m} here -- please try again."  
+  end  
+end  
+Dummy.new.anything  
+The output is:
+
+>ruby p012zmm.rb  
+There's no method called anything here -- please try again.  
+>Exit code: 0  
+You are also responsible for maintaining the method_missing signature. It's possible to write a hook that captures only a missing method's name while ignoring its arguments and associated block.
+
+Ruby Procs
+<Method Missing | TOC | Including other files >
+
+Blocks are not objects, but they can be converted into objects of class Proc. This can be done by calling the lambda method of the module Kernel. A block created with lambda acts like a Ruby method. If you don't specify the right number of arguments, you can't call the block.
+
+prc = lambda {"hello"}  
+Proc objects are blocks of code that have been bound to a set of local variables. The class Proc has a method call that invokes the block. The program p024proccall.rb illustrates this.
+
+# Blocks are not objects  
+# they can be converted into objects of class Proc by calling lambda method  
+prc = lambda {puts 'Hello'}  
+# method call invokes the block  
+prc.call  
+  
+# another example  
+toast = lambda do  
+  puts 'Cheers'  
+end  
+toast.call  
+The output is:
+
+>ruby p024proccall.rb  
+Hello  
+Cheers  
+>Exit code: 0  
+Remember you cannot pass methods into other methods (but you can pass procs into methods), and methods cannot return other methods (but they can return procs).
+
+The next example shows how methods can take procs. Example p025mtdproc.rb
+
+=begin  
+  You cannot pass methods into other methods (but you can pass procs into methods),  
+  and methods cannot return other methods (but they can return procs)  
+=end  
+  
+def some_mtd some_proc  
+  puts 'Start of mtd'  
+  some_proc.call  
+  puts 'End of mtd'  
+end  
+  
+say = lambda do  
+  puts 'Hello'  
+end  
+  
+some_mtd say  
+The output is:
+
+>ruby p025mtdproc.rb  
+Start of mtd  
+Hello  
+End of mtd  
+>Exit code: 0  
+Here's another example of passing arguments using lambda.
+
+aBlock = lambda { |x| puts x }  
+aBlock.call 'Hello World!'  
+# output is: Hello World!  
+
+
+Including Other Files In Ruby
+<Ruby Procs | TOC | Open Classes>
+
+
+ 
+When writing your first few Ruby programs, you tend to place all of your code in a single file. But as you grow as a Ruby programmer, your Ruby programs will also grow, and at some point you will realize that having a single file containing all of your code just won't do. It is easier to break your code up into logical groupings and place each group in a separate file or files. When you begin using multiple files, you have a need for the Ruby's require and load methods (both are global functions defined in Object, but are used like language keywords) that help you include other files in your program.
+
+The load method includes the named Ruby source file every time the method is executed:
+
+load 'filename.rb'  
+The more commonly used require method loads any given file only once:
+
+require 'filename'  
+require gives you access to the many extensions and programming libraries bundled with the Ruby programming language-as well as an even larger number of extensions and libraries written independently by other programmers and made available for use with Ruby.
+
+Note that you say require 'filename', not require 'filename.rb'. Aside from looking nicer, this bareword way of referring to the extension is necessary because not all extensions use files ending in .rb. Specifically, extensions written in C are stored in files ending with .so or .dll. To keep the process transparent-that is, to save you the trouble of knowing whether the extension you want uses a .rb file or not-Ruby accepts a bareword and then does some automatic file-searching and trying out of possible filenames until it finds the file corresponding to the extension you have requested.
+
+require(string) => true or false
+
+Ruby tries to load the library named string, returning true if successful. If the filename does not resolve to an absolute path, it will be searched for in the directories listed in $:. If the file has the extension ".rb", it is loaded as a source file; if the extension is ".so", ".o", or ".dll", or whatever the default shared library extension is on the current platform, Ruby loads the shared library as a Ruby extension. Otherwise, Ruby tries adding ".rb", ".so", and so on to the name. The name of the loaded feature is added to the array in $:.
+
+IN RAILS: Rails uses load in preference to require, for example, in development mode - which means that if you're trying your application in a browser and making changes to the code at the same time, your changes are reloaded, overriding any caching behavior on the part of the Web server. Multiple require calls in the same place don't have the same effect if the application has already read the file in once.
+
+Now, let's look at an example of another class - p030motorcycle.rb
+
+class MotorCycle  
+  def initialize(make, color)  
+    # Instance variables  
+    @make = make  
+    @color = color  
+    end  
+  def startEngine  
+    if (@engineState)  
+      puts 'Engine is already Running'  
+    else  
+      @engineState = true  
+      puts 'Engine Idle'  
+    end  
+  end  
+end  
+We write another program p031motorcycletest.rb to test out the above class.
+
+# p031motorcycletest.rb  
+require_relative 'p030motorcycle'  
+m = MotorCycle.new('Yamaha', 'red')  
+m.startEngine  
+We use require_relative (introduced in Ruby 1.9) for this because the location of the file we're loading is relative to the file we're loading it from - they're both in the same directory.
+
+Ruby Open Classes
+
+
+ 
+
+<Including other Files | TOC | Inheritance>
+
+In Ruby, classes are never closed: you can always add methods to an existing class. This applies to the classes you write as well as the standard, built-in classes. All you have to do is open up a class definition for an existing class, and the new contents you specify will be added to whatever's there.
+
+Now to the program p031motorcycletest.rb in the last topic, add the method dispAttr
+
+require 'p030motorcycle'  
+m = MotorCycle.new('Yamaha', 'red')  
+m.startEngine  
+  
+class MotorCycle  
+  def dispAttr  
+    puts 'Color of MotorCycle is ' + @color  
+    puts 'Make  of MotorCycle is ' + @make  
+  end  
+end  
+m.dispAttr  
+m.startEngine  
+puts self.class  
+puts self  
+Please note that self.class refers to Object and self refers to an object called main of class Object.
+
+One more example is program - p031xdognext.rb
+
+require 'p029dog'  
+# define class Dog  
+class Dog  
+  def big_bark  
+    puts 'Woof! Woof!'  
+  end  
+end  
+# make an object  
+d = Dog.new('Labrador', 'Benzy')  
+d.bark  
+d.big_bark  
+d.display  
+Here's another example of adding a method to the String class. The program p032mystring.rb illustrates the same.
+
+class String  
+  def writesize  
+    self.size  
+  end  
+end  
+size_writer = "Tell me my size!"  
+puts size_writer.writesize  
+(You can confirm the output to the above programs yourself).
+
+If you're writing a new method that conceptually belongs in the original class, you can reopen the class and append your method to the class definition. You should only do this if your method is generally useful, and you're sure it won't conflict with a method defined by some library you include in the future. If your method isn't generally useful, or you don't want to take the risk of modifying a class after its initial creation, create a subclass of the original class. The subclass can override its parent's methods, or add new ones. This is safer because the original class, and any code that depended on it, is unaffected.
+
+Ruby Inheritance
+
+
+ 
+
+<Open Classes | TOC | Overriding Methods>
+
+Inheritance is a relation between two classes. We know that all cats are mammals, and all mammals are animals. The benefit of inheritance is that classes lower down the hierarchy get the features of those higher up, but can also add specific features of their own. If all mammals breathe, then all cats breathe. In Ruby, a class can only inherit from a single other class. Some other languages support multiple inheritance, a feature that allows classes to inherit features from multiple classes, but Ruby doesn't support this.
+
+We can express this concept in Ruby - see the p033mammal.rb program below:
+
+class Mammal  
+  def breathe  
+    puts "inhale and exhale"  
+  end  
+end  
+  
+class Cat < Mammal  
+  def speak  
+    puts "Meow"  
+  end  
+end  
+  
+rani = Cat.new  
+rani.breathe  
+rani.speak  
+Though we didn't specify how a Cat should breathe, every cat will inherit that behaviour from the Mammal class since Cat was defined as a subclass of Mammal. (In OO terminology, the smaller class is a subclass and the larger class is a super-class. The subclass is sometimes also known as a derived or child class and the super-class as base or parent class). Hence from a programmer's standpoint, cats get the ability to breathe for free; after we add a speak method, our cats can both breathe and speak.
+
+There will be situations where certain properties of the super-class should not be inherited by a particular subclass. Though birds generally know how to fly, penguins are a flightless subclass of birds. In the example p034bird.rb below, we override fly in class Penguin:
+
+class Bird  
+  def preen  
+    puts "I am cleaning my feathers."  
+  end  
+  def fly  
+    puts "I am flying."  
+  end  
+end  
+  
+class Penguin < Bird  
+  def fly  
+    puts "Sorry. I'd rather swim."  
+  end  
+end  
+  
+p = Penguin.new  
+p.preen  
+p.fly  
+Rather than exhaustively define every characteristic of every new class, we need only to append or to redefine the differences between each subclass and its super-class. This use of inheritance is sometimes called differential programming. It is one of the benefits of object-oriented programming.
+
+The above two programs are taken from the online Ruby User's Guide.
+
+Thus, Inheritance allows you to create a class that is a refinement or specialization of another class. Inheritance is indicated with <.
+
+Here's another example, p035inherit.rb
+
+class GF  
+  @m =10  
+  puts @m.object_id  
+  def initialize  
+    puts 'In GF class'  
+  end  
+  def gfmethod  
+    puts 'GF method call'  
+  end  
+end  
+  
+# class F sub-class of GF  
+class F < GF  
+  def initialize  
+    super  
+    puts 'In F class'  
+  end  
+end  
+  
+# class S sub-class of F  
+class S < F  
+  def initialize  
+    super  
+    puts @m  
+    puts @m.object_id  
+    puts 'In S class'  
+  end  
+end  
+son = S.new  
+son.gfmethod  
+A class can only inherit from one class at a time (i.e. a class can inherit from a class that inherits from another class which inherits from another class, but a single class can not inherit from many classes at once).
+
+There are many classes and modules (more on this later) built into the standard Ruby language. They are available to every Ruby program automatically; no require is required. Some built-in classes are Array, Bignum, Class, Dir, Exception, File, Fixnum, Float, Integer, IO, Module, Numeric, Object, Range, String, Thread, Time. Some built-in modules are Comparable, Enumerable, GC, Kernel, Math.
+
+The Object class is the parent class of all classes in Ruby. Its methods are therefore available to all objects unless explicitly overridden. In Ruby 1.9, Object is no longer the root of the class hierarchy. A new class named BasicObject serves that purpose, and Object is a subclass of BasicObject. BasicObject is a very simple class, with almost no methods of its own. When you create a class in Ruby 1.9, you still extend Object unless you explicitly specify the superclass, and most programmers will never need to use or extend BasicObject.
+
+In Ruby, initialize is an ordinary method and is inherited like any other.
+
+IN RAILS: Inheritance is one of the key organizational techniques for Rails program design and the design of the Rails framework.
+
+Inheritance and Instance Variables
+
+Consider the code:
+
+class Dog  
+  def initialize(breed)  
+    @breed = breed  
+  end  
+end  
+  
+class Lab < Dog  
+  def initialize(breed, name)  
+    super(breed)  
+    @name = name  
+  end  
+  
+  def to_s  
+    "(#@breed, #@name)"  
+  end  
+end  
+  
+puts Lab.new("Labrador", "Benzy").to_s  
+The to_s method in class Lab references @breed variable from the superclass Dog. This code works as you probably expect it to:
+
+puts Lab.new("Labrador", "Benzy").to_s ==> (Labrador, Benzy)  
+Because this code behaves as expected, you may be tempted to say that these variables are inherited. That is not how Ruby works.
+
+All Ruby objects have a set of instance variables. These are not defined by the objects's class - they are simply created when a value is assigned to them. Because instance variables are not defined by a class, they are unrelated to subclassing and the inheritance mechanism.
+
+In the above code, Lab defines an initialize method that chains to the initialize method of its superclass. The chained method assigns values to the variable @breed, which makes those variables come into existence for a particular instance of Lab.
+
+The reason that they sometimes appear to be inherited is that instance variables are created by the methods that first assign values to them, and those methods are often inherited or chained.
+
+Since instance variables have nothing to do with inheritance, it follows that an instance variable used by a subclass cannot "shadow" an instance variable in the superclass. If a subclass uses an instance variable with the same name as a variable used by one of its ancestors, it will overwrite the value of its ancestor's variable.
+
+Ruby Overriding Methods
+
+
+ 
+
+<Inheritance | TOC | Overloading Methods>
+
+Method overriding, in object oriented programming, is a language feature that allows a subclass to provide a specific implementation of a method that is already provided by one of its superclasses. The implementation in the subclass overrides (replaces) the implementation in the superclass.
+
+Here's an example p037xmtdovride.rb:
+
+class A  
+  def a  
+    puts 'In class A'  
+  end  
+end  
+  
+class B < A  
+  def a  
+    puts 'In class B'  
+  end  
+end  
+  
+b = B.new  
+b.a  
+The method a in class B overrides the method a in class A.
+
+Usage of super
+
+The way super handles arguments is as follows:
+
+When you invoke super with no arguments Ruby sends a message to the parent of the current object, asking it to invoke a method of the same name as the method invoking super. It automatically forwards the arguments that were passed to the method from which it's called.
+Called with an empty argument list - super()-it sends no arguments to the higher-up method, even if arguments were passed to the current method.
+Called with specific arguments - super(a, b, c) - it sends exactly those arguments.
+An example (p038bicycle.rb) from Ruby for Rails book highlights this:
+
+class Bicycle  
+  attr_reader :gears, :wheels, :seats  
+  def initialize(gears = 1)  
+    @wheels = 2  
+    @seats = 1  
+    @gears = gears  
+  end  
+end  
+  
+class Tandem < Bicycle  
+  def initialize(gears)  
+    super  
+    @seats = 2  
+  end  
+end  
+t = Tandem.new(2)  
+puts t.gears  
+puts t.wheels  
+puts t.seats  
+b = Bicycle.new  
+puts b.gears  
+puts b.wheels  
+puts b.seats  
+The output is:
+
+>ruby p038bicycle.rb  
+2  
+2  
+2  
+1  
+2  
+1  
+>Exit code: 0  
+We shall be talking in depth about attr_reader later.
+
+Redefining Methods
+
+(Adapted from David Black's book, Ruby For Rails)
+
+Nothing stops you from defining a method twice. Program p038or.rb
+
+class OR  
+  def mtd  
+    puts "First definition of method mtd"  
+  end  
+  def mtd  
+    puts "Second definition of method mtd"  
+  end  
+end  
+OR.new.mtd  
+What happens when we call mtd on an instance of OR? Let's find out:
+
+OR.new.mtd  
+The printed result is the Second definition of method mtd. The second definition has prevailed: We see the output from that definition, not from the first. Nothing stops you from defining a method twice, however the new version takes precedence.
+
+Abstract class
+
+In Ruby, we can define an abstract class that invokes certain undefined "abstract" methods, which are left for subclasses to define. For example:
+
+# This class is abstract; it doesn't define hello or name  
+# No special syntax is required: any class that invokes methods  
+# that are intended for a subclass to implement is abstract  
+class AbstractKlass  
+  def welcome  
+    puts "#{hello} #{name}"  
+  end  
+end  
+  
+# A concrete class  
+class ConcreteKlass < AbstractKlass  
+  def hello; "Hello"; end  
+  def name; "Ruby students"; end  
+end  
+  
+ConcreteKlass.new.welcome # Displays "Hello Ruby students"
+
+
+
+Ruby Overloading Methods
+
+
+ 
+
+<Overriding Methods | TOC | Access Control>
+
+You want to create two different versions of a method with the same name: two methods that differ in the arguments they take. However, a Ruby class can have only one method with a given name (if you define a method with the same name twice, the latter method definition prevails as seen in example p038or.rb in topic Ruby Overriding Methods). Within that single method, though, you can put logic that branches depending on how many and what kinds of objects were passed in as arguments.
+
+Here's a Rectangle class that represents a rectangular shape on a grid. You can instantiate a Rectangle by one of two ways: by passing in the coordinates of its top-left and bottom-right corners, or by passing in its top-left corner along with its length and width. There's only one initialize method, but you can act as though there were two.
+
+# The Rectangle constructor accepts arguments in either  
+# of the following forms:  
+#   Rectangle.new([x_top, y_left], length, width)  
+#   Rectangle.new([x_top, y_left], [x_bottom, y_right])  
+class Rectangle  
+  def initialize(*args)  
+    if args.size < 2  || args.size > 3  
+      # modify this to raise exception, later  
+      puts 'This method takes either 2 or 3 arguments'  
+    else  
+      if args.size == 2  
+        puts 'Two arguments'  
+      else  
+        puts 'Three arguments'  
+      end  
+    end  
+  end  
+end  
+Rectangle.new([10, 23], 4, 10)  
+Rectangle.new([10, 23], [14, 13])  
+The above program p037rectangle.rb is incomplete from the Rectangle class viewpoint, but is enough to demonstrate how method overloading can be achieved. Also remember that the initialize method takes in a variable number of arguments.
+
+Ruby Summary
+<Overloading Methods | TOC | Access Control>
+
+
+ 
+Regular expressions, though cryptic, is a powerful tool for working with text. Ruby has this feature built-in. It's used for pattern-matching and text processing.
+Many people find regular expressions difficult to use, difficult to read, un-maintainable, and ultimately counterproductive.
+You may end up using only a modest number of regular expressions in your Ruby and Rails applications.
+Becoming a regular expression wizard isn't a prerequisite for Rails programming.
+It's advisable to learn at least the basics of how regular expressions work.
+A regular expression is simply a way of specifying a pattern of characters to be matched in a string.
+In Ruby, you typically create a regular expression by writing a pattern between slash characters (/pattern/). In Ruby, regular expressions are objects (of type Regexp) and can be manipulated as such. // is a regular expression and an instance of the Regexp class.
+An object is an entity that serves as a container for data and also controls access to the data. Associated with an object is a set of attributes, which are essentially no more than variables belonging to that object. Also associated with an object is a set of functions that provide an interface to the functionality of the object, called methods.
+Things an object knows about itself are called instance variables. They represent an object's state (the data - for example, the quantity and the product id), and can have unique values for each object of that type.
+Things an object can do are called methods.
+An object is a combination of state and methods that use the state.
+A class is used to construct an object. A class is a blueprint for an object.
+More than 30 built-in classes are predefined in the Ruby class hierarchy. The following class hierarchy is important,
+In Ruby, everything from an integer to a string is considered to be an object. And each object has built in 'methods' (Ruby term for functions) which can be used to do various useful things. To use a method, you need to put a dot after the object, and then append the method name. Some methods such as puts and gets are available everywhere and don't need to be associated with a specific object. Technically speaking, these methods are provided by Ruby's Kernel module (more on this later) and they are included in all Ruby objects (the Kernel module is included by class Object, so its methods are available in every Ruby object). When you run a Ruby application, an object called main of class Object is automatically created. This object provides access to the Kernel methods.
+Ruby integers are objects of class Fixnum or Bignum. The Fixnum and Bignum classes represent integers of differing sizes. Both classes descend from Integer (and therefore Numeric). The floating-point numbers are objects of class Float, corresponding to the native architecture's double data type.
+A new class is defined typically using class Name ... end
+Classes in Ruby are first-class objects - each is an instance of class Class.
+MUG THIS UP Class is an object, and Object is a class." Hal Fulton
+When a new class is defined say Name, an object of type Class is created and assigned to a constant (Name. in this case). When Name.new is called to create a new object, the new class method in Class is run by default, which in turn invokes allocate to allocate memory for the object, before finally calling the new object's initialize method. The constructing and initializing phases of an object are separate and both can be over-ridden. The initialization is done via the initialize instance method while the construction is done via the new class method. initialize is not a constructor!
+Objects are created on the heap.
+In the statement: d = Dog.new('Labrador', 'Benzy') The variable d is known as a reference variable. It does not hold the object itself, but it holds something like a pointer or an address of the object. You use the dot operator (.) on a reference variable to say, "use the thing before the dot to get me the thing after the dot." For example: d.bark
+As soon as an object comes into existence, it already responds to a number of messages. Every object is "born" with certain innate abilities. To see a list of innate methods, you can call the methods method: puts d.methods The result is a list of all the messages (methods) this newly minted object comes bundled with. Amongst these many methods, the methods object_id and respond_to? are important.
+Every object in Ruby has a unique id number associated with it that can be found by the method object_id.
+You can determine in advance (before you ask the object to do something) whether the object knows how to handle the message you want to send it, by using the respond_to? method.
+You can ask any object of which class it's a member by using its Object.class method.
+instance_of? returns true if object is an instance of the given class.
+Literal 'Constructors' means you can use special notation, instead of a call to new, to create a new object of that class. Look at the example given for String. Symbol, Array, Hash, Range, Regexp
+Garbage Collection (GC): The Ruby object heap allocates a minimum of 8 megabytes. Ruby's GC is called mark-and-sweep. The "mark" stage checks objects to see if they are still in use. If an object is in a variable that can still be used in the current scope, the object (and any object inside that object) is marked for keeping. If the variable is long gone, off in another method, the object isn't marked. The "sweep" stage then frees objects which haven't been marked. Ruby uses a conservative mark-and-sweep GC mechanism. There is no guarantee that an object will undergo garbage collection before the program terminates.
+Variables are used to hold references to objects. Variables themselves have no type, nor are they objects themselves.
+method_missing gives you a way to intercept unanswerable messages and handle them gracefully.
+Blocks are not objects, but they can be converted into objects of class Proc. This can be done by calling the lambda method of the module Kernel.
+Remember you cannot pass methods into other methods (but you can pass procs into methods), and methods cannot return other methods (but they can return procs).
+The load method includes the named Ruby source file every time the method is executed.
+The more commonly used require method loads any given file only once.
+Note that you say require 'filename', not require 'filename.rb'.
+In Ruby, classes are never closed: you can always add methods to an existing class. This applies to the classes you write as well as the standard, built-in classes. All you have to do is open up a class definition for an existing class, and the new contents you specify will be added to whatever's there.
+The benefit of inheritance is that classes lower down the hierarchy get the features of those higher up, but can also add specific features of their own.
+In Ruby, a class can only inherit from a single other class.
+The Object class is the parent class of all classes in Ruby. Its methods are therefore available to all objects unless explicitly overridden.
+Method overriding allows a subclass to provide a specific implementation of a method that is already provided by one of its superclasses. The implementation in the subclass overrides (replaces) the implementation in the superclass.
+Nothing stops you from defining a method twice, however the new version takes precedence.
+When you invoke super with no arguments Ruby sends a message to the parent of the current object, asking it to invoke a method of the same name as the method invoking super. It automatically forwards the arguments that were passed to the method from which it's called.
+Called with an empty argument list - super() - it sends no arguments to the higher-up method, even if arguments were passed to the current method.
+Called with specific arguments - super(a, b, c) - it sends exactly those arguments.
+A Ruby class can have only one method with a given name.
+
+Ruby Access Control
+
+
+ 
+
+<Overloading Methods | TOC | Exceptions>
+
+The only easy way to change an object's state in Ruby is by calling one of its methods. Control access to the methods, and you have controlled access to the object. A good rule of the thumb is never to expose methods that could leave an object in an invalid state.
+
+Ruby gives you three levels of protection:
+
+Public methods can be called by everyone - no access control is enforced. A class's instance methods (these do not belong only to one object; instead, every instance of the class can call them) are public by default; anyone can call them. The initialize method is always private.
+Protected methods can be invoked only by objects of the defining class and its subclasses. Access is kept within the family. However, usage of protected is limited.
+Private methods cannot be called with an explicit receiver - the receiver is always self. This means that private methods can be called only in the context of the current object; you cannot invoke another object's private methods.
+Access control is determined dynamically, as the program runs, not statically. You will get an access violation only when the code attempts to execute the restricted method. Let us refer to the program p047classaccess.rb below:
+
+# p047classaccess.rb  
+class ClassAccess  
+  def m1          # this method is public  
+  end  
+  protected  
+    def m2        # this method is protected  
+    end  
+  private  
+    def m3        # this method is private  
+    end  
+end  
+ca = ClassAccess.new  
+ca.m1  
+#ca.m2  
+#ca.m3  
+If you remove the comments of the last two statements in the above program, you will get an access violation runtime error.
+
+Alternatively, you can set access levels of named methods by listing them as arguments to the access control functions.
+
+class ClassAccess  
+  def m1       # this method is public  
+  end  
+  public :m1  
+  protected :m2, :m3  
+  private :m4, :m5  
+end  
+Here is an example (p047zclassaccess.rb) for 'protected' access control:
+
+# p047zclassaccess.rb  
+class Person  
+  def initialize(age)  
+    @age = age  
+  end  
+  def age  
+    @age  
+  end  
+  def compare_age(c)  
+    if c.age > age  
+      "The other object's age is bigger."  
+    else  
+      "The other object's age is the same or smaller."  
+    end  
+  end  
+  protected :age  
+end  
+  
+chris = Person.new(25)  
+marcos = Person.new(34)  
+puts chris.compare_age(marcos)  
+#puts chris.age  
+The output is:
+
+>ruby p047zclassaccess.rb  
+The other object's age is bigger.  
+>Exit code: 0  
+In the preceding example, we compare one Person instance with another Person instance. The comparison, however, depends on the result of a call to the method age. The object doing the comparing (chris, in the example) has to ask the other object (marcos) to execute its age method. So, age can't be private.
+
+That's where the protected level comes in. With age protected rather than private, chris can ask marcos to execute age, because chris and marcos are both instances of the same class. But if you try to call the age method of a Person object when self is anything other than a Person object, the method will fail.
+
+A protected method is thus like a private method, but with an exemption for cases where the class of self (chris) and the class of the object having the method called on it (marcos) are the same.
+
+Note that if you remove the comment from the last statement in the program ie. when you use age directly, Ruby throws an exception.
+
+In Ruby, public, private and protected apply only to methods. Instance and class variables are encapsulated and effectively private, and constants are effectively public. There is no way to make an instance variable accessible from outside a class (except by defining an accessor method). And there is no way to define a constant that is inaccessible to outside use.
+
+Overriding private methods
+
+Private methods cannot be invoked from outside the class that defines them. But they are inherited by subclasses. This means that subclasses can invoke them and can override them.
+
+Classes often use private methods as internal helper methods. They are not part of the public API of the class and are not intended to be visible. If you happen to define a method in your subclass that has the same name as a private method in the superclass, you will have inadvertently overridden the superclass's internal utility method, and this will almost certainly cause unintended behavior.
+
+Accessor methods
+
+Encapsulation is achieved when the instance variables are private to an object and you have public getters and setters (in Ruby, we call them attribute readers and attribute writers). To make instance variables available, Ruby provides accessor methods that return their values. The program p048accessor.rb illustrates the same.
+
+# p048accessor.rb  
+# First without accessor methods  
+class Song  
+  def initialize(name, artist)  
+    @name     = name  
+    @artist   = artist  
+  end  
+  def name  
+    @name  
+  end  
+  def artist  
+    @artist  
+  end  
+end  
+  
+song = Song.new("Brazil", "Ivete Sangalo")  
+puts song.name  
+puts song.artist  
+  
+# Now, with accessor methods  
+class Song  
+  def initialize(name, artist)  
+    @name     = name  
+    @artist   = artist  
+  end  
+  attr_reader :name, :artist  # create reader only  
+  # For creating reader and writer methods  
+  # attr_accessor :name  
+  # For creating writer methods  
+  # attr_writer :name  
+  
+end  
+  
+song = Song.new("Brazil", "Ivete Sangalo")  
+puts song.name  
+puts song.artist  
+Are instance variables inherited by a sub-class?
+David Black, the author of Ruby for Rails, has this to say: Instance variables are per-object, not per-class, and they're not inherited. But if a method uses one, and that method is available to subclasses, then it will still use the variable -- but "the variable" in the sense of one per object. See the following program - p049instvarinherit.rb:
+
+# p049instvarinherit.rb  
+class C  
+  def initialize  
+    @n = 100  
+  end  
+  
+  def increase_n  
+    @n *= 20  
+  end  
+end  
+  
+class D < C  
+  def show_n  
+    puts "n is #{@n}"  
+  end  
+end  
+  
+d = D.new  
+d.increase_n  
+d.show_n  
+The output is:
+
+>ruby p049instvarinherit.rb  
+n is 2000  
+>Exit code: 0  
+The @n in D's methods is the same (for each instance) as the one in C.
+
+All Ruby objects have a set of instance variables. These are not defined by the object's class - they are simply created when a value is assigned to them. Because instance variables are not defined by a class, they are unrelated to subclassing and the inheritance mechanism.
+
+Top-level methods
+
+When you write code at the top level, Ruby provides you automatically with a default self. This object is a direct instance of Object. When you ask it to describe itself:
+
+puts self  
+it says:
+
+main  
+The object main is the current object as soon as your program starts up.
+
+Suppose you define a method at the top level:
+
+def talk  
+  puts "Hello"  
+end  
+Who, or what, does the method belong to? It's not inside a class or module definition block, so it doesn't appear to be an instance method of a class or module. It's not attached to any particular object (as in def obj.talk). What is it? When we define top-level methods, we're actually creating (private) instance methods for class Object.
+
+Because top-level methods are private, you can't call them with an explicit receiver; you can only call them by using the implied receiver, self. That means self must be an object on whose method search path the given top-level method lies. But every object's search path includes the Kernel module, because the class Object mixes in Kernel, and every object's class has Object as an ancestor. That means you can always call any top-level method, wherever you are in your program. It also means you can never use an explicit receiver on a top-level method.
+
+From our earliest examples onward, we've been making bareword-style calls to puts and print, like this one:
+
+puts 'Hello'  
+puts and print are built-in private instance methods of Kernel. That's why you can - indeed, must - call them without a receiver.
+
+
+Ruby Exceptions
+
+
+ 
+
+<Access Control | TOC | Logging >
+
+Raising An Exception
+
+An exception is a special kind of object, an instance of the class Exception or a descendant of that class that represents some kind of exceptional condition; it indicates that something has gone wrong. When this occurs, an exception is raised (or thrown). By default, Ruby programs terminate when an exception occurs. But it is possible to declare exception handlers. An exception handler is a block of code that is executed if an exception occurs during the execution of some other block of code. Raising an exception means stopping normal execution of the program and transferring the flow-of-control to the exception handling code where you either deal with the problem that's been encountered or exit the program completely. Which of these happens - dealing with it or aborting the program - depends on whether you have provided a rescue clause (rescue is a fundamental part of the Ruby language). If you haven't provided such a clause, the program terminates; if you have, control flows to the rescue clause.
+
+Ruby has some predefined classes - Exception and its children - that help you to handle errors that can occur in your program. The following figure shows the Ruby exception hierarchy.
+
+
+
+Reference: The above figure is from the Programming Ruby book.
+
+The chart above shows that most of the subclasses extend a class known as StandardError. These are the "normal" exceptions that typical Ruby programs try to handle. The other exceptions represent lower-level, more serious, or less recoverable conditions, and normal Ruby programs do not typically attempt to handle them.
+
+The following method raises an exception whenever it's called. Its second message will never be printed. Program p043raise.rb
+
+# p043raise.rb  
+def raise_exception  
+  puts 'I am before the raise.'  
+  raise 'An error has occured'  
+  puts 'I am after the raise'  
+end  
+raise_exception  
+The output is:
+
+>ruby p043raise.rb  
+I am before the raise.  
+p043raise.rb:4:in `raise_exception': An error has occured (RuntimeError)  
+    from p043raise.rb:7  
+>Exit code: 1  
+The raise method is from the Kernel module. By default, raise creates an exception of the RuntimeError class. To raise an exception of a specific class, you can pass in the class name as an argument to raise. Refer program p044inverse.rb
+
+# p044inverse.rb  
+def inverse(x)  
+  raise ArgumentError, 'Argument is not numeric' unless x.is_a? Numeric  
+  1.0 / x  
+end  
+puts inverse(2)  
+puts inverse('not a number')  
+The output is:
+
+>ruby p044inverse.rb  
+0.5  
+p044inverse.rb:3:in `inverse': Argument is not numeric (ArgumentError)  
+    from p044inverse.rb:7  
+>Exit code: 1  
+Remember, methods that act as queries are often named with a trailing ?. is_a? is a method in the Object class and returns true or false. The unless modifier when tacked at the end of a normal statement means execute the preceding expression unless condition is true.
+
+Defining new exception classes: To be even more specific about an error, you can define your own Exception subclass:
+
+class NotInvertibleError < StandardError  
+end  
+Handling an Exception
+
+To do exception handling, we enclose the code that could raise an exception in a begin-end block and use one or more rescue clauses to tell Ruby the types of exceptions we want to handle. It is to be noted that the body of a method definition is an implicit begin-end block; the begin is omitted, and the entire body of the method is subject to exception handling, ending with the end of the method.
+
+The program p045handexcp.rb illustrates this:
+
+# p045handexcp.rb  
+def raise_and_rescue  
+  begin  
+    puts 'I am before the raise.'  
+    raise 'An error has occured.'  
+    puts 'I am after the raise.'  
+  rescue  
+    puts 'I am rescued.'  
+  end  
+  puts 'I am after the begin block.'  
+end  
+raise_and_rescue  
+The output is:
+
+>ruby p045handexcp.rb  
+I am before the raise.  
+I am rescued.  
+I am after the begin block.  
+>Exit code: 0  
+Observe that the code interrupted by the exception never gets run. Once the exception is handled, execution continues immediately after the begin block that spawned it.
+
+If you write a rescue clause with no parameter list, the parameter defaults to StandardError. Each rescue clause can specify multiple exceptions to catch. At the end of each rescue clause you can give Ruby the name of a local variable to receive the matched exception. The parameters to the rescue clause can also be arbitrary expressions (including method calls) that return an Exception class. If we use raise with no parameters, it re-raises the exception.
+
+You can stack rescue clauses in a begin/rescue block. Exceptions not handled by one rescue clause will trickle down to the next:
+
+begin  
+  # -  
+rescue OneTypeOfException  
+  # -  
+rescue AnotherTypeOfException  
+  # -  
+else  
+  # Other exceptions  
+end  
+For each rescue clause in the begin block, Ruby compares the raised Exception against each of the parameters in turn. The match will succeed if the exception named in the rescue clause is the same as the type of the currently thrown exception, or is a superclass of that exception. The code in an else clause is executed if the code in the body of the begin statement runs to completion without exceptions. If an exception occurs, then the else clause will obviously not be executed. The use of an else clause is not particularly common in Ruby.
+
+If you want to interrogate a rescued exception, you can map the Exception object to a variable within the rescue clause, as shown in the program p046excpvar.rb
+
+# p046excpvar.rb  
+begin  
+  raise 'A test exception.'  
+rescue Exception => e  
+  puts e.message  
+  puts e.backtrace.inspect  
+end  
+The output is:
+
+>ruby p046excpvar.rb  
+A test exception.  
+["p046excpvar.rb:3"]  
+>Exit code: 0  
+The Exception class defines two methods that return details about the exception. The message method returns a string that may provide human-readable details about what went wrong. The other important method is backtrace. This method returns an array of strings that represent the call stack at the point that the exception was raised.
+
+If you need the guarantee that some processing is done at the end of a block of code, regardless of whether an exception was raised then the ensure clause can be used. ensure goes after the last rescue clause and contains a chunk of code that will always be executed as the block terminates. The ensure block will always run.
+
+Some common exceptions are:
+
+RuntimeError (this is the default exception raised by the raise method), NoMethodError, NameError, IOError, TypeError and ArgumentError.
+
+An Example: Let's modify program p027readwrite.rb to include exception handling as shown in example p046xreadwrite.rb below.
+
+# p046xreadwrite.rb  
+# Open and read from a text file  
+# Note that since a block is given, file will automatically be closed when the block terminates  
+begin  
+  File.open('p014constructs.rb', 'r') do |f1|  
+    while line = f1.gets  
+      puts line  
+    end  
+  end  
+  
+  # Create a new file and write to it  
+  File.open('test.rb', 'w') do |f2|  
+    # use "" for two lines of text  
+    f2.puts "Created by Satish\nThank God!"  
+  end  
+rescue Exception => msg  
+  # display the system generated error message  
+  puts msg  
+end  
+Improper error messages can provide critical information about an application which may aid an attacker in exploiting the application. The most common problem occurs when detailed internal error messages such as stack traces, database dumps, and error codes are displayed to the user. Security analysts view logging and error handling as potential areas of risk. It is recommended that production applications should not use, for example, a puts e.backtrace.inspect call unless it is being directly committed into a log that is not viewable to the end user.
+
+Validation example
+
+Here's an example from the Ruby Cookbook, showing how one can do validation of user's inputs.
+
+class Name  
+  # Define default getter methods, but not setter methods.  
+  attr_reader :first, :last  
+  # When someone tries to set a first name, enforce rules about it.  
+  def first=(first)  
+    if first == nil or first.size == 0  
+      raise ArgumentError.new('Everyone must have a first name.')  
+    end  
+    first = first.dup  
+    first[0] = first[0].chr.capitalize  
+    @first = first  
+  end  
+  
+  # When someone tries to set a last name, enforce rules about it.  
+  def last=(last)  
+    if last == nil or last.size == 0  
+      raise ArgumentError.new('Everyone must have a last name.')  
+    end  
+    @last = last  
+  end  
+  
+  def full_name  
+    "#{@first} #{@last}"  
+  end  
+  # Delegate to the setter methods instead of setting the instance  
+  # variables directly.  
+  def initialize(first, last)  
+    self.first = first  
+    self.last = last  
+  end  
+end  
+  
+jacob = Name.new('Jacob', 'Berendes')  
+jacob.first = 'Mary Sue'  
+jacob.full_name # => "Mary Sue Berendes"  
+john = Name.new('john', 'von Neumann')  
+john.full_name # => "John von Neumann"  
+john.first = 'john'  
+john.first # => "John"  
+john.first = nil  
+# ArgumentError: Everyone must have a first name.  
+Name.new('Kero, international football star and performance artist', nil)  
+# ArgumentError: Everyone must have a last name.  
+The Name class keeps track of peoples' first and last names. It uses setter methods to enforce two somewhat parochial rules: everyone must have both a first and a last name, and everyone's first name must begin with a capital letter. The Name class has been written in such a way, that the rules are enforced both in the constructor and after the object has been created. Sometimes you don't trust the data coming in through the setter methods. That's when you can define your own methods to stop bad data before it infects your objects. Within a class, you have direct access to the instance variables. You can simply assign to an instance variable and the setter method won't be triggered. If you do want to trigger the setter method, you'll have to call it explicitly. Note how, in the Name#initialize method above, we call the first= and last= methods instead of assigning to @first and @last. This makes sure the validation code gets run for the initial values of every Name object. We can't just say first = first, because first is a variable name in that method
+
+
+Ruby Logging
+
+
+ 
+
+<Exceptions | TOC | Time class>
+
+The Logger class in the Ruby standard library, helps write log messages to a file or stream. It supports time- or size-based rolling of log files. Messages can be assigned severities, and only those messages at or above the logger's current reporting level will be logged.
+
+When you write code, you simply assume that all the messages will be logged. At runtime, you can get a more or a less verbose log by changing the log level. A production application usually has a log level of Logger::INFO or Logger::WARN. From least to most severe, the instance methods are Logger.debug, Logger.info, Logger.warn, Logger.error, and Logger.fatal.
+
+The DEBUG log level is useful for step-by-step diagnostics of a complex task. The ERROR level is often used when handling exceptions: if the program can't solve a problem, it logs the exception rather than crash and expects a human administrator to deal with it. The FATAL level should only be used when the program cannot recover from a problem, and is about to crash or exit.
+
+If your log is being stored in a file, you can have Logger rotate or replace the log file when it gets too big, or once a certain amount of time has elapsed:
+
+require 'logger'  
+# Keep data for the current month only  
+Logger.new('this_month.log', 'monthly')  
+# Keep data for today and the past 20 days.  
+Logger.new('application.log', 20, 'daily')  
+# Start the log over whenever the log exceeds 100 megabytes in size.  
+Logger.new('application.log', 0, 100 * 1024 * 1024)  
+The code below, uses the application's logger to print a debugging message, and (at a higher severity) as part of error-handling code.
+
+#logex.rb  
+require 'logger'  
+$LOG = Logger.new('log_file.log', 'monthly')  
+def divide(numerator, denominator)  
+  $LOG.debug("Numerator: #{numerator}, denominator #{denominator}")  
+  begin  
+    result = numerator / denominator  
+  rescue Exception => e  
+    $LOG.error "Error in division!: #{e}"  
+    result = nil  
+  end  
+  return result  
+end  
+divide(10, 2)  
+The contents of the file log_file.log is:
+
+# Logfile created on Tue Mar 18 17:09:29 +0530 2008 by /  
+D, [2008-03-18T17:09:29.216000 #2020] DEBUG -- : Numerator: 10, denominator 2  
+Now try to call the method by:
+
+divide(10, 0)  
+The contents of the file log_file.log is:
+
+# Logfile created on Tue Mar 18 17:09:29 +0530 2008 by /  
+D, [2008-03-18T17:09:29.216000 #2020] DEBUG -- : Numerator: 10, denominator 2  
+D, [2008-03-18T17:13:50.044000 #2820] DEBUG -- : Numerator: 10, denominator 0  
+E, [2008-03-18T17:13:50.044000 #2820] ERROR -- : Error in division!: divided by 0  
+To change the log level, simply assign the appropriate constant to level:
+
+$LOG.level = Logger::ERROR  
+Now our logger will ignore all log messages except those with severity ERROR or FATAL. The contents of the file log_file.log is:
+
+E, [2008-03-18T17:15:59.919000 #2624] ERROR -- : Error in division!: divided by 0  
+
+
+Ruby Time Class
+
+
+ 
+
+<Logging | TOC | Duck Typing>
+
+The Time class in Ruby has a powerful formatting function which can help you represent the time in a variety of ways. The Time class contains Ruby's interface to the set of time libraries written in C. Time zero for Ruby is the first second GMT of January 1, 1970. Ruby's DateTime class is superior to Time for astronomical and historical applications, but you can use Time for most everyday programs.
+
+The strftime function is modelled after C's printf. The p042time.rb program shows some of these functions.
+
+t = Time.now  
+# to get day, month and year with century  
+# also hour, minute and second  
+puts t.strftime("%d/%m/%Y %H:%M:%S")  
+  
+# You can use the upper case A and B to get the full  
+# name of the weekday and month, respectively  
+puts t.strftime("%A")  
+puts t.strftime("%B")  
+  
+# You can use the lower case a and b to get the abbreviated  
+# name of the weekday and month, respectively  
+puts t.strftime("%a")  
+puts t.strftime("%b")  
+  
+# 24 hour clock and Time zone name  
+puts t.strftime("at %H:%M %Z")  
+The output is:
+
+>ruby p042time.rb  
+10/09/2006 10:06:31  
+Sunday  
+September  
+Sun  
+Sep  
+at 10:06 India Standard Time  
+>Exit code: 0  
+
+
+Ruby Summary
+<Time Class | TOC | Duck Typing>
+
+
+ 
+Ruby gives you three levels of protection:
+public - methods can be called by everyone. A class's instance methods are public by default.
+protected - methods can be invoked only by objects of the defining class and its subclasses.
+private - methods cannot be called with an explicit receiver - the receiver is always self. This means that private methods can be called only in the context of the current object. The initialize method is always private.
+Access control is determined dynamically, as the program runs, not statically. You will get an access violation only when the code attempts to execute the restricted method.
+Top-level methods are private instance methods of the Object class.
+attr_reader is reader only; attr_writer is writer only and attr_accessor is both reader and writer.
+An exception is a special kind of object, an instance of the class Exception or a descendant of that class.
+The raise method is from the Kernel module. By default, raise creates an exception of the RuntimeError class. To raise an exception of a specific class, you can pass in the class name as an argument to raise.
+To do exception handling, we enclose the code that could raise an exception in a begin-end block and use one or more rescue clauses to tell Ruby the types of exceptions we want to handle.
+It is to be noted that the body of a method definition is an implicit begin-end block; the begin is omitted, and the entire body of the method is subject to exception handling, ending with the end of the method.
+If you write a rescue clause with no parameter list, the parameter defaults to StandardError.
+If you need the guarantee that some processing is done at the end of a block of code, regardless of whether an exception was raised then the ensure clause can be used. ensure goes after the last rescue clause and contains a chunk of code that will always be executed as the block terminates. The ensure block will always run.
+By default, the inspect message, which can be sent to any object, formats the object's ID and instance variables. It returns a string containing a human-readable representation of object. If not overridden, uses the to_s method to generate the string.
+The Time class contains Ruby's interface to the set of time libraries written in C.
+Time zero for Ruby is the first second GMT of January 1, 1970.
+Ruby's DateTime class is superior to Time for astronomical and historical applications, but you can use Time for most everyday programs.
+
+
+Duck Typing
+<Time class | TOC | Syntactic Sugar>
+
+
+ 
+You'll have noticed that in Ruby we don't declare the types of variables or methods - everything is just some kind of object. Ruby objects (unlike objects in some other object-oriented languages) can be individually modified. You can always add methods on a per object basis. In Ruby, the behavior or capabilities of an object can deviate from those supplied by its class.
+
+In Ruby, we rely less on the type (or class) of an object and more on its capabilities. Hence, Duck Typing means an object type is defined by what it can do, not by what it is. Duck Typing refers to the tendency of Ruby to be less concerned with the class of an object and more concerned with what methods can be called on it and what operations can be performed on it. In Ruby, we would use respond_to? or might simply pass an object to a method and know that an exception will be raised if it is used inappropriately.
+
+If an object walks like a duck and talks like a duck, then the Ruby interpreter is happy to treat it as if it were a duck.
+
+Consider the following example.
+
+# Check whether the object defines the to_str method  
+puts ('A string'.respond_to? :to_str) # => true  
+puts (Exception.new.respond_to? :to_str) # => true  
+puts (4.respond_to? :to_str) # => false  
+The above example is the simplest example of Ruby's philosophy of "duck typing:" if an object quacks like a duck (or acts like a string), just go ahead and treat it as a duck (or a string). Whenever possible, you should treat objects according to the methods they define rather than the classes from which they inherit or the modules they include.
+
+Now consider the following three classes - Duck, Goose and DuckRecording. Program p036duck.rb
+
+Code
+
+class Duck  
+  def quack  
+    'Quack!'  
+  end  
+  
+  def swim  
+    'Paddle paddle paddle...'  
+  end  
+end  
+  
+class Goose  
+  def honk  
+    'Honk!'  
+  end  
+  def swim  
+    'Splash splash splash...'  
+  end  
+end  
+  
+class DuckRecording  
+  def quack  
+    play  
+end  
+  
+  def play  
+    'Quack!'  
+  end  
+end  
+  
+def make_it_quack(duck)  
+  duck.quack  
+end  
+puts make_it_quack(Duck.new)  
+puts make_it_quack(DuckRecording.new)  
+  
+def make_it_swim(duck)  
+  duck.swim  
+end  
+puts make_it_swim(Duck.new)  
+puts make_it_swim(Goose.new)  
+If you refer to the code shown below:
+
+def make_it_quack(duck)  
+  duck.quack  
+end  
+puts make_it_quack(Duck.new)  
+puts make_it_quack(DuckRecording.new)  
+A method that told a Duck to quack works when given a DuckRecoding, due to Duck Typing. Similarly in the following code:
+
+def make_it_swim(duck)  
+  duck.swim  
+end  
+puts make_it_swim(Duck.new)  
+puts make_it_swim(Goose.new)  
+A method that tells a Duck to swim when given a Goose, works.
+
+
+Ruby Syntactic Sugar
+
+
+ 
+
+<Duck Typing | TOC | Mutable and Immutable Objects>
+
+Programmers use the term syntactic sugar to refer to special rules that let you write your code in a way that doesn't correspond to the normal rules but that is easier to remember how to do and looks better.
+
+Let us say we want to set the name of a dog. As a starting point, name can be set along with everything else at object creation time, as in the example below.
+
+class NewDog  
+  def initialize(breed, name)  
+    @breed = breed  
+    @name = name  
+  end  
+  attr_reader :breed, :name   # create reader only  
+end  
+nd = NewDog.new('Doberman', 'Benzy')  
+puts nd.name  
+Let's write a set_name method that allows us to set, or reset, the name of an existing dog. We'll also rewrite the initialize method so that it doesn't expect a name:
+
+class NewDog  
+  def initialize(breed)  
+    @breed = breed  
+  end  
+  attr_reader :breed, :name   # create reader only  
+  # setter method  
+  def set_name(nm)  
+    @name = nm  
+  end  
+end  
+nd = NewDog.new('Doberman')  
+nd.set_name('Benzy')  
+puts nd.name  
+Ruby allows you to define methods that end with an equal sign (=). Let's replace set_name with a method called name=
+
+def name=(nm)  
+  @name = nm  
+end  
+name= does exactly what set_name did, and in spite of the slightly odd method name, you can call it just like any other method:
+
+nd.name=('Benzy')  
+Here's the modified example - p050newdog.rb
+
+class NewDog  
+  def initialize(breed)  
+    @breed = breed  
+  end  
+  attr_reader :breed, :name # create reader only  
+  
+  # setter method  
+  def name=(nm)  
+    @name = nm  
+  end  
+end  
+  
+nd = NewDog.new('Doberman')  
+#nd.name=('Benzy')  
+nd.name = 'Benzy'  
+puts nd.name  
+The equal sign gives you that familiar "assigning a value to something" feeling, so you know you're dealing with a setter method. It still looks odd, but Ruby takes care of that, too.
+
+Ruby gives you some syntactic sugar for calling setter methods. Instead of this:
+
+nd.name=('Benzy')  
+you're allowed to do this:
+
+nd.name = 'Benzy'  
+When the interpreter sees the message "name" followed by " =", it automatically ignores the space before equal sign and reads the single message "name=" - a call to the method whose name is name=, which we've defined. As for the right-hand side: parentheses are optional on single arguments to methods, so you can just put 'Benzy' there and it will be picked up as the argument to the name= method.
+
+
+Mutable and Immutable Objects
+
+
+ 
+
+<Syntactic Sugar | TOC | Object Serialization >
+
+Mutable objects are objects whose state can change. Immutable objects are objects whose state never changes after creation.
+
+Immutable objects have many desirable properties:
+
+Immutable objects are thread-safe. Threads cannot corrupt what they cannot change.
+Immutable objects make it easier to implement encapsulation. If part of an object's state is stored in an immutable object, then accessor methods can return that object to outside callers, without fear that those callers can change the object's state.
+Immutable objects make good hash keys, since their hash codes cannot change.
+In Ruby, Mutability is a property of an instance, not of an entire class. Any instance can become immutable by calling freeze.
+
+Freezing Objects
+
+The freeze method in class Object prevents you from changing an object, effectively turning an object into a constant. After we freeze an object, an attempt to modify it results in TypeError. The following program p050xfreeze.rb illustrates this:
+
+str = 'A simple string. '  
+str.freeze  
+begin  
+  str << 'An attempt to modify.'  
+rescue => err  
+  puts "#{err.class} #{err}"  
+end  
+# The output is - TypeError can't modify frozen string  
+However, freeze operates on an object reference, not on a variable. This means that any operation resulting in a new object will work. This is illustrated by the following example:
+
+str = 'Original string - '  
+str.freeze  
+str += 'attachment'  
+puts str  
+# Output is - Original string - attachment  
+The expression str + 'attachment' is evaluated to a new object, which is then assigned to str. The object is not changed, but the variable str now refers to a new object.
+
+frozen?
+
+A method frozen? tells you whether an object is frozen or not. Let's take an example here:
+
+a = b = 'Original String'  
+b.freeze  
+puts a.frozen? # true  
+puts b.frozen? # true  
+a = 'New String'  
+puts a  
+puts b  
+puts a.frozen? # false  
+puts b.frozen? # true  
+Let us understand what we are doing here - a and b are two variables both of which are pointing to a string object - Original String. We then freeze the object Original String. Hence both a and b are now pointing to the frozen object Original String. This is verified by the statements puts a.frozen? and puts b.frozen?. Next, we create a new string object New String and make variable a point to this new object New String. Variable b is still pointing to the frozen object while a is not. This verified by the last 2 statements of the program.
+
+Usage:
+Ruby sometimes copies objects and freezes the copies. When you use a string as a hash key, Ruby actually copies the string, freezes the copy, and uses the copy as the hash key: that way, if the original string changes later on, the hash key isn't affected.
+
+Ruby's internal file operations work from a frozen copy of a filename instead of using the filename directly. If another thread modifies the original filename in the middle of an operation that's supposed to be atomic, there's no problem: Ruby wasn't relying on the original filename anyway. You can adopt this copy-and-freeze pattern in multi-threaded code to prevent a data structure you're working on from being changed by another thread.
+
+Another common programmer-level use of this feature is to freeze a class in order to prevent future modifications to it.
+
+Note: Whenever an object in Ruby has no reference to it, then that object is marked for removal and the garbage collector will remove that object based on its algorithm. There is no way to access an un-referenced object.
+
+
+Ruby Summary
+<Mutable and Immutable Objects | TOC | Object Serialization>
+
+
+ 
+In Ruby, we rely less on the type (or class) of an object and more on its capabilities. Hence, Duck Typing means an object type is defined by what it can do, not by what it is.
+Duck Typing refers to the tendency of Ruby to be less concerned with the class of an object and more concerned with what methods can be called on it and what operations can be performed on it.
+In Ruby, we would use respond_to? or might simply pass an object to a method and know that an exception will be raised if it is used inappropriately.
+Syntactic sugar refer to special rules that let you write your code in a way that doesn't correspond to the normal rules but that is easier to remember how to do and looks better.
+Ruby allows you to define methods that end with an equal sign (=)
+Mutable objects are objects whose state can change. Immutable objects are objects whose state never changes after creation.
+Mutability is a property of an instance, not of an entire class. Any instance can become immutable by calling freeze.
+The freeze method in class Object prevents you from changing an object, effectively turning an object into a constant. After we freeze an object, an attempt to modify it results in TypeError.
+freeze operates on an object reference, not on a variable. This means that any operation resulting in a new object will work.
+A method frozen? tells you whether an object is frozen or not
+
+Object Serialization
+
+
+ 
+
+<Mutable Immutable Objects | TOC | Modules/Mixins >
+
+Java features the ability to serialize objects, letting you store them somewhere and reconstitute them when needed. Ruby calls this kind of serialization marshaling.
+
+We will write a basic class p051gamecharacters.rb just for testing marshalling.
+
+# p051gamecharacters.rb  
+class GameCharacter  
+  def initialize(power, type, weapons)  
+    @power = power  
+    @type = type  
+    @weapons = weapons  
+  end  
+  attr_reader :power, :type, :weapons  
+end  
+The program p052dumpgc.rb creates an object of the above class and then uses Marshal.dump to save a serialized version of it to the disk.
+
+# p052dumpgc.rb  
+require 'p051gamecharacters'  
+gc = GameCharacter.new(120, 'Magician', ['spells', 'invisibility'])  
+puts gc.power.to_s + ' ' + gc.type + ' '  
+gc.weapons.each do |w|  
+  puts w + ' '  
+end  
+  
+File.open('game', 'w+') do |f|  
+  Marshal.dump(gc, f)  
+end  
+The program p053loadgc.rb uses Marshal.load to read it in.
+
+# p053loadgc.rb  
+require 'p051gamecharacters'  
+File.open('game') do |f|  
+  @gc = Marshal.load(f)  
+end  
+  
+puts @gc.power.to_s + ' ' + @gc.type + ' '  
+@gc.weapons.each do |w|  
+  puts w + ' '  
+end  
+Marshal only serializes data structures. It can't serialize Ruby code (like Proc objects), or resources allocated by other processes (like file handles or database connections). Marshal just gives you an error when you try to serialize a file.
+
+
+Modules Mixins
+
+
+ 
+
+<Object Serialization | TOC | Self >
+
+Ruby Modules are similar to classes in that they hold a collection of methods, constants, and other module and class definitions. Modules are defined much like classes are, but the module keyword is used in place of the class keyword. Unlike classes, you cannot create objects based on modules nor can you subclass them; instead, you specify that you want the functionality of a particular module to be added to the functionality of a class, or of a specific object. Modules stand alone; there is no "module hierarchy" of inheritance. Modules is a good place to collect all your constants in a central location.
+
+Modules serve two purposes:
+
+First they act as namespace, letting you define methods whose names will not clash with those defined elsewhere. The examples p058mytrig.rb, p059mymoral.rb, p060usemodule.rb illustrates this.
+# p058mytrig.rb  
+module Trig  
+  PI = 3.1416  
+  # class methods  
+  def Trig.sin(x)  
+    # ...  
+  end  
+  def Trig.cos(x)  
+    # ...  
+  end  
+end  
+  
+# p059mymoral.rb  
+module Moral  
+  VERY_BAD = 0  
+  BAD         = 1  
+  def Moral.sin(badness)  
+    # ...  
+  end  
+end  
+  
+# p060usemodule.rb  
+require 'p058mytrig'  
+require 'p059mymoral'  
+Trig.sin(Trig::PI/4)  
+Moral.sin(Moral::VERY_BAD)  
+Second, they allow you to share functionality between classes - if a class mixes in a module, that module's instance methods become available as if they had been defined in the class. They get mixed in. The program p061mixins.rb illustrates this.
+# p061mixins.rb  
+module D  
+  def initialize(name)  
+    @name =name  
+  end  
+  def to_s  
+    @name  
+  end  
+end  
+  
+module Debug  
+  include D  
+  # Methods that act as queries are often  
+  # named with a trailing ?  
+  def who_am_i?  
+    "#{self.class.name} (\##{self.object_id}): #{self.to_s}"  
+  end  
+end  
+  
+class Phonograph  
+  # the include statement simply makes a reference to a named module  
+  # If that module is in a separate file, use require to drag the file in  
+  # before using include  
+  include Debug  
+  # ...  
+end  
+  
+class EightTrack  
+  include Debug  
+  # ...  
+end  
+  
+ph = Phonograph.new("West End Blues")  
+et = EightTrack.new("Real Pillow")  
+puts ph.who_am_i?  
+puts et.who_am_i?  
+Observe how we use require or load. require and load take strings as their arguments.
+
+require 'motorcycle' or load 'motorcycle.rb'
+
+include takes the name of a module, in the form of a constant, as in include Stuff.
+
+The include method accepts any number of Module objects to mix in:
+include Enumerable, Comparable
+
+Although every class is a module, the include method does not allow a class to be included within another class.
+
+Some more examples:
+
+#  p062stuff.rb  
+#  A module may contain constants, methods and classes.  
+#  No instances  
+  
+module Stuff  
+  C = 10  
+  def Stuff.m(x)  # prefix with the module name for a class method  
+    C*x  
+  end  
+  def p(x)        # an instance method, mixin for other classes  
+    C + x  
+  end  
+  class T  
+    @t = 2  
+  end  
+end  
+puts Stuff::C     # Stuff namespace  
+puts Stuff.m(3)   # like a class method  
+x = Stuff::T.new  
+# uninitialized constant error, if you try the following  
+# puts C  
+  
+#------------  
+  
+# p063stuffusage.rb  
+require 'p062stuff'     # loads Stuff module from Stuff.rb  
+                    # $: is a system variable -- contains the path for loads  
+class D  
+  include Stuff     # refers to the loaded module  
+  puts Stuff.m(4)  
+end  
+  
+d = D.new  
+puts d.p(5)         # method p from Stuff  
+puts $:             # array of folders to search for load  
+$: << "c:/"         # add a folder to the load path  
+puts $:  
+puts Stuff.m(5)     # Stuff class methods not called from D object  
+Remember that you can mix in more than one module in a class. However, a class cannot inherit from more than one class. Class names tend to be nouns, while module names are often adjectives.
+
+IN RAILS: The Rails source code makes heavy use of modules, in particular the technique of reopening the definition bodies of both classes and modules.
+
+
+Self - The current/default object
+
+
+ 
+
+<Modules/Mixins | TOC | Constants >
+
+At every point when your program is running, there is one and only one self - the current or default object accessible to you in your program. You can tell which object self represents by following a small set of rules.
+
+Top level context
+
+The top level context is before you have entered any other context, such as a class definition. Therefore the term top level refers to program code written outside of a class or module. If you open a new text file and type:
+
+x = 1  
+you have created a top level local variable x. If you type:
+
+def m  
+end  
+you have created a top level method - an instance method of Object (even though self is not Object). Top-level methods are always private. Ruby provides you with a start-up self at the top level. If you type:
+
+puts self  
+it displays main - a special term the default self object uses to refer to itself. The class of the main object is Object.
+
+Self inside class and module definitions
+
+In a class or module definition, self is the class or module object.
+
+# p063xself1.rb  
+class S  
+  puts 'Just started class S'  
+  puts self  
+  module M  
+    puts 'Nested module S::M'  
+    puts self  
+  end  
+  puts 'Back in the outer level of S'  
+  puts self  
+end  
+The output is:
+
+>ruby p063xself1.rb  
+Just started class S  
+S  
+Nested module S::M  
+S::M  
+Back in the outer level of S  
+S  
+>Exit code: 0  
+Self in instance method definitions
+
+At the time the method definition is executed, the most you can say is that self inside this method will be some future object that has access to this method.
+
+# p063xself2.rb  
+class S  
+  def m  
+    puts 'Class S method m:'  
+    puts self  
+  end  
+end  
+s = S.new  
+s.m  
+The output is:
+
+>ruby p063xself2.rb  
+Class S method m:  
+#<S:0x2835908>  
+>Exit code: 0  
+The output #<S:0x2835908> is Ruby's way of saying "an instance of S".
+
+Self in singleton-method and class-method definitions
+
+Singleton methods - those attached to a particular object can be called by only one object. When a singleton method is executed, self is the object that owns the method, as shown below:
+
+# p063xself3.rb  
+obj = Object.new  
+def obj.show  
+  print 'I am an object: '  
+  puts "here's self inside a singleton method of mine:"  
+  puts self  
+end  
+obj.show  
+print 'And inspecting obj from outside, ' 
+puts "to be sure it's the same object:"  
+puts obj  
+The output of the above example is:
+
+>ruby p063xself3.rb  
+I am an object: here's self inside a singleton method of mine: 
+#<Object:0x2835688> 
+And inspecting obj from outside, to be sure it's the same object:  
+#<Object:0x2835688>  
+>Exit code: 0  
+Class methods are defined as singleton methods for class objects. Refer to the following program:
+
+# p063xself4.rb  
+class S  
+  def S.x  
+    puts "Class method of class S"  
+    puts self  
+  end  
+end  
+S.x  
+The output is:
+
+>ruby p063xself4.rb  
+Class method of class S  
+S  
+>Exit code: 0  
+self inside a singleton method (a class method, in this case) is the object whose singleton method it is.
+
+
+Ruby Constants
+
+
+ 
+
+<Ruby Self | TOC | Socket Programming >
+
+A Ruby constant is like a variable, except that its value is supposed to remain constant for the duration of the program. The Ruby interpreter does not actually enforce the constancy of constants, but it does issue a warning if a program changes the value of a constant (as shown in this trivial example) - p054constwarn.rb
+
+# p054constwarn.rb  
+A_CONST = 10  
+A_CONST = 20  
+Produces a warning:
+
+p054constwarn.rb:3: warning: already initialized constant A_CONST  
+Lexically, the names of constants look like the names of local variables, except that they begin with a capital letter. By convention, most constants are written in all uppercase with underscores to separate words, LIKE_THIS. Ruby class and module names are also constants, but they are conventionally written using initial capital letters and camel case, LikeThis.
+
+Note that constants do not exist until a value is actually assigned to them.
+
+Although constants should not be changed, you can modify the internal states of the objects they reference, as seen in p055constalter.rb
+
+# p055constalter.rb  
+A_CONST = "Doshi"  
+B_CONST = A_CONST  
+A_CONST[0] = "J" # alter string referenced by constant  
+puts A_CONST # displays Joshi  
+puts B_CONST # also displays Joshi  
+IN RAILS: You can find examples of this kind of operation (modify) in the Rails source code, where constants figure prominently and the objects they represent undergo fairly frequent changes.
+
+Note:
+
+Constants defined within a class or module may be accessed anywhere within the class or module.
+Outside the class or module, they may be accessed using the scope operator, :: prefixed by an expression that returns the appropriate class or module.
+Constants defined outside any class or module may be accessed as it is or by using the scope operator with no prefix.
+Constants may not be defined in methods.
+Constants may be added to existing classes and modules from the outside by using the class or module name and the scope operator before the constant name.
+The program p056const.rb shows all of this:
+
+OUTER_CONST = 99  
+  
+class Const  
+    def get_const  
+      CONST  
+    end  
+    CONST = OUTER_CONST + 1  
+end  
+  
+puts Const.new.get_const  
+puts Const::CONST  
+puts ::OUTER_CONST  
+puts Const::NEW_CONST = 123  
+Another elaborate example on own methods in a class is p057mymethods2.rb In this example we shall also see how to write a class method.
+
+# p057mymethods2.rb  
+# variables and methods start lowercase  
+$glob = 5             # global variables start with $  
+class TestVar         # class name constant, start uppercase  
+ @@cla = 6            # class variables start with @@  
+ CONST_VAL = 7        # constant style, all caps, underscore  
+ def initialize(x)    # constructor  
+  @inst = x           # instance variables start with @  
+  @@cla += 1          # each object shares @@cla  
+ end  
+ def self.cla         # class method, getter  
+  @@cla  
+ end  
+ def self.cla=(y)     # class method, setter, also TestVar.  
+  @@cla = y  
+ end  
+ def inst             # instance method, getter  
+  @inst  
+ end  
+ def inst=(i)         # instance method, setter  
+  @inst = i  
+ end  
+end  
+puts $glob  
+test = TestVar.new(3) # calls constructor  
+puts TestVar.cla      # calls getter  
+puts test.inspect     # gives object ID and instance vars  
+TestVar.cla = 4       # calls setter  
+test.inst=8           # calls setter  
+puts TestVar.cla  
+puts test.inst        # calls getter  
+other = TestVar.new(17)  
+puts other.inspect  
+puts TestVar.cla

@@ -1,0 +1,96 @@
+Ruby 1.9
+
+irb(main):001:0> [1,2,3].to_s
+=> "[1, 2, 3]"
+Ruby 1.8.6
+
+irb(main):001:0> [1,2,3].to_s
+=> "123"
+Action: Use .join instead
+
+
+Ruby 1.9
+
+irb(main):002:0> {1,2}
+SyntaxError: (irb):2: syntax error, unexpected ',', expecting tASSOC
+Ruby 1.8.6
+
+irb(main):001:0> {1,2}
+=> {1=>2}
+Action: Convert to {1 => 2}
+
+Ruby 1.9
+
+irb(main):001:0> "cat"[1]
+=> "a"
+Ruby 1.8.6
+
+irb(main):001:0> "cat"[1]
+=> 97
+
+
+Ruby 1.9
+
+irb(main):001:0> ?c
+=> "c"
+Ruby 1.8.6
+
+irb(main):001:0> ?c
+=> 99
+
+
+Ruby 1.9
+
+irb(main):001:0> case 'a'; when /\w/: puts 'word'; end
+SyntaxError: (irb):1: syntax error, unexpected ':',
+expecting keyword_then or ',' or ';' or '\n'
+Ruby 1.8.6
+
+irb(main):001:0> case 'a'; when /\w/: puts 'word'; end
+word
+
+uby 1.9
+
+irb(main):001:0> i=0; [1,2,3].each {|i|}; i
+=> 0
+irb(main):002:0> i=0; for i in [1,2,3]; end; i
+=> 3
+Ruby 1.8.6
+
+irb(main):001:0> i=0; [1,2,3].each {|i|}; i
+=> 3
+
+
+Ruby 1.9
+
+irb(main):001:0> {1=>2}.index(2)
+(irb):18: warning: Hash#index is deprecated; use Hash#key
+=> 1
+irb(main):002:0> {1=>2}.key(2)
+=> 1
+Ruby 1.8.6
+
+irb(main):001:0> {1=>2}.index(2)
+=> 1
+Action: Use Hash.key
+
+
+Ruby 1.9
+
+irb(main):001:0> 5.to_sym
+NoMethodError: undefined method 'to_sym' for 5:Fixnum
+Ruby 1.8.6
+
+irb(main):001:0> 5.to_sym
+=> nil
+
+
+Ruby 1.9
+
+irb(main):001:0> {:a=>"a", :c=>"c", :b=>"b"}
+=> {:a=>"a", :c=>"c", :b=>"b"}
+Ruby 1.8.6
+
+irb(main):001:0> {:a=>"a", :c=>"c", :b=>"b"}
+=> {:a=>"a", :b=>"b", :c=>"c"}
+Order is insertion ordepr	cd 

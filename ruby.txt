@@ -1,0 +1,1555 @@
+In Java you just have classes (both abstract and concrete) and interfaces. The Ruby language provides classes, modules, and a mix of both. In this post I want to dive into mixins in Ruby.
+
+In the Ruby language a mixin is a class that is mixed with a module. In other words the implementation of the class and module are joined, intertwined, combined, etc. A mixin is a different mechanism to the extend construct used to add concrete implementation to a class. With a mixin you can extend from a module instead of a class. Before we get started with the mixin examples let me first explain what a module is.
+
+I think of a module as a degenerate abstract class. A module can’t be instantiated and no class can directly extend it but a module can fully implement methods. A class can leverage the implementation of a module by including the module’s methods. A module can define methods that can be shared in different and seperate classes either at the class or instance level.
+
+Let me define a module, albeit a trivial one, that would convert a numeric integer value to English.
+
+[code lang="ruby"]
+# Convert a integer value to English.
+module Stringify
+# Requires an instance variable @value
+def stringify
+if @value == 1
+"One"
+elsif @value == 2
+"Two"
+elsif @value == 3
+"Three"
+end
+end
+end
+[/code]
+
+Note that the Stringify module makes use of a @value instance variable. The class that will be mixed with this module needs to define and set a @value instance variable since the Stringify module uses it but does not define it. In addition to instance variables a module could invoke methods defined not in the module itself but in the class that it will be mixed with.
+
+Now let me construct a self contained module that is not dependent on the implementation of any class that it can be mixed with.
+
+[code lang="ruby"]
+# A Math module akin to Java Math class.
+module Math
+# Could be called as a class, static, method
+def add(val_one, val_two)
+BigInteger.new(val_one + val_two)
+end
+end
+[/code]
+
+The methods in the Math module are intended to be invoked like class methods, also known as static methods. The add method in the Math module accepts two integer values and returns an instance of BigInteger. Let me now define the mixin BigInteger class.
+
+[code lang="ruby"]
+# Base Number class
+class Number
+def intValue
+@value
+end
+end
+
+# BigInteger extends Number
+class BigInteger < Number
+
+# Add instance methods from Stringify
+include Stringify
+
+# Add class methods from Math
+extend Math
+
+# Add a constructor with one parameter
+def initialize(value)
+@value = value
+end
+end
+[/code]
+
+I loosely modeled the BigInteger and Number classes after the Java versions. The BigInteger class defines one constructor and directly inherits one method from the Number base class. To mix in the methods implemented in the Stringify and Math modules with the BigInteger class you will note the usage of the include and extend methods, respectively.
+
+[code lang="ruby"]
+# Create a new object
+bigint1 = BigInteger.new(10)
+# Call a method inherited from the base class
+puts bigint1.intValue # --> 10
+[/code]
+
+The extend method will mix a module’s methods at the class level. The method defined in the Math module can be used as a class/static method.
+
+[code lang="ruby"]
+# Call class method extended from Math
+bigint2 = BigInteger.add(-2, 4)
+puts bigint2.intValue # --> 2
+[/code]
+
+The include method will mix a module’s methods at the instance level, meaning that the methods will become instance methods. The method defined in the Stringify module can be used as an instance method.
+
+[code lang="ruby"]
+# Call a method included from Stringify
+puts bigint2.stringify # --> 'Two'
+[/code]
+
+There is another use of the extend method. You can enhance an object instance by mixing it with a module at run time! This is a powerful feature. Let me create a module that will be used to extend an object, changing it’s responsibilities at runtime.
+
+[code lang="ruby"]
+# Format a numeric value as a currency
+module CurrencyFormatter
+def format
+"$#{@value}"
+end
+end
+[/code]
+
+To mix an object instance with a module you can do the following:
+
+[code lang="ruby"]
+# Add the module methods to
+# this object instance, only!
+bigint2.extend CurrencyFormatter
+puts bigint2.format # --> '$2'
+[/code]
+
+Calling the extend method on an an instance will only extend that one object, objects of the same class will not be extended with the new functionality.
+
+[code lang="ruby"]
+puts bigint1.format # will generate an error
+[/code]
+
+Modules that will be mixed with a class via the include or extend method could define something like a contructor or initializer method to the module. The module initializer method will be invoked at the time the module is mixed with a class. When a class extends a module the module’s self.extended method will be invoked:
+
+[code lang="ruby"]
+module Math
+def self.extended(base)
+# Initialize module.
+end
+end
+[/code]
+
+The self prefix indicates that the method is a static module level method. The base parameter in the static extended method will be either an instance object or class object of the class that extended the module depending whether you extend a object or class, respectively.
+
+When a class includes a module the module’s self.included method will be invoked.
+
+[code lang="ruby"]
+module Stringify
+def self.included(base)
+# Initialize module.
+end
+end
+[/code]
+
+The base parameter will be a class object for the class that includes the module.
+
+It is important to note that inside the included and extended initializer methods you can include and extend other modules, here is an example of that:
+
+[code lang="ruby"]
+module Stringify
+def self.included(base)
+base.extend SomeOtherModule
+end
+end
+[/code]
+
+Modules are a way of grouping together methods, classes, and constants. Modules give you two major benefits.
+
+Modules provide a namespace and prevent name clashes.
+
+Modules implement the mixin facility.
+
+Modules define a namespace, a sandbox in which your methods and constants can play without having to worry about being stepped on by other methods and constants.
+
+Syntax:
+
+module Identifier
+   statement1
+   statement2
+   ...........
+end
+Module constants are named just like class constants, with an initial uppercase letter. The method definitions look similar, too: module methods are defined just like class methods.
+
+As with class methods, you call a module method by preceding its name with the module.s name and a period, and you reference a constant using the module name and two colons.
+
+Example:
+
+#!/usr/bin/ruby
+
+# Module defined in trig.rb file
+
+module Trig
+   PI = 3.141592654
+   def Trig.sin(x)
+   # ..
+   end
+   def Trig.cos(x)
+   # ..
+   end
+end
+We can define one more module with same function name but different functionality:
+
+#!/usr/bin/ruby
+
+# Module defined in moral.rb file
+
+module Moral
+   VERY_BAD = 0
+   BAD = 1
+   def Moral.sin(badness)
+   # ...
+   end
+end
+Like class methods, whenever you define a method in a module, you specify the module name followed by a dot and then the method name.
+
+Ruby require Statement:
+
+The require statement is similar to the include statement of C and C++ and the import statement of Java. If a third program wants to use any defined module, it can simply load the module files using the Ruby require statement:
+
+Syntax:
+
+require filename
+Here it is not required to give .rb extension along with a file name.
+
+Example:
+
+require 'trig.rb'
+require 'moral'
+
+y = Trig.sin(Trig::PI/4)
+wrongdoing = Moral.sin(Moral::VERY_BAD)
+IMPORTANT: Here both the files contain same function name. So this will result in code ambiguity while including in calling program but modules avoid this code ambiguity and we are able to call appropriate function using module name.
+
+Ruby include Statement:
+
+You can embed a module in a class. To embed a module in a class, you use the include statement in the class:
+
+Syntax:
+
+include modulename
+If a module is defined in separate file then it is required to include that file using require statement before embeding module in a class.
+
+Example:
+
+Consider following module written in Week.rb file.
+
+module Week
+   FIRST_DAY = "Sunday"
+   def Week.weeks_in_month
+      puts "You have four weeks in a month"
+   end
+   def Week.weeks_in_year
+      puts "You have 52 weeks in a year"
+   end
+end
+Now you can include this module in a class as follows:
+
+#!/usr/bin/ruby
+require "Week"
+
+class Decade
+include Week
+   no_of_yrs=10
+   def no_of_months
+      puts Week::FIRST_DAY
+      number=10*12
+      puts number
+   end
+end
+d1=Decade.new
+puts Week::FIRST_DAY
+Week.weeks_in_month
+Week.weeks_in_year
+d1.no_of_months
+This will produce following result:
+
+Sunday
+You have four weeks in a month
+You have 52 weeks in a year
+Sunday
+120
+Mixins in Ruby:
+
+Before going through this section, I assume you have knowledge of Object Oriented Concepts.
+
+When a class can inherit features from more than one parent class, the class is supposed to show multiple inheritance.
+
+Ruby does not suppoprt mutiple inheritance directly but Ruby Modules have another, wonderful use. At a stroke, they pretty much eliminate the need for multiple inheritance, providing a facility called a mixin.
+
+Mixins give you a wonderfully controlled way of adding functionality to classes. However, their true power comes out when the code in the mixin starts to interact with code in the class that uses it.
+
+Let us examine the following sample code to gain an understand of mixin:
+
+module A
+   def a1
+   end
+   def a2
+   end
+end
+module B
+   def b1
+   end
+   def b2
+   end
+end
+
+class Sample
+include A
+include B
+   def s1
+   end
+end
+
+samp=Sample.new
+samp.a1
+samp.a2
+samp.b1
+samp.b2
+samp.s1
+Module A consists of the methods a1 and a2. Module B consists of the methods b1 and b2. The class Sample includes both modules A and B. The class Sample can access all four methods, namely, a1, a2, b1, and b2. Therefore, you can see that the class Sample inherits from both the modules. Thus you can say the class Sample shows multiple inheritance or a mixin.
+
+The behavior of an instance is determined by its class, but there may be times we know that a particular instance should have special behavior. In most languages, we must go to the trouble of defining another class, which would then only be instantiated once. In ruby we can give any object its own methods.
+
+ruby> class SingletonTest
+    |   def size
+    |     25
+    |   end
+    | end
+   nil
+ruby> test1 = SingletonTest.new
+   #<SingletonTest:0xbc468>
+ruby> test2 = SingletonTest.new
+   #<SingletonTest:0xbae20>
+ruby> def test2.size
+    |    10
+    | end
+   nil
+ruby> test1.size
+   25
+ruby> test2.size
+   10
+In this example, test1 and test2 belong to same class, but test2 has been given a redefined size method and so they behave differently. A method given only to a single object is called a singleton method.
+
+Singleton methods are often used for elements of a graphic user interface (GUI), where different actions need to be taken when different buttons are pressed.
+
+Singleton methods are not unique to ruby, as they appear in CLOS, Dylan, etc. Also, some languages, for example, Self and NewtonScript, have singleton methods only. These are sometimes called prototype-based languages.
+
+
+Our classification of objects in everyday life is naturally hierarchical. We know that all cats are mammals, and all mammals are animals. Smaller classes inherit characteristics from the larger classes to which they belong. If all mammals breathe, then all cats breathe.
+
+We can express this concept in ruby:
+
+ruby> class Mammal
+    |   def breathe
+    |     puts "inhale and exhale"
+    |   end
+    | end
+   nil
+ruby> class Cat<Mammal
+    |   def speak
+    |     puts "Meow"
+    |   end
+    | end
+   nil
+Though we didn't specify how a Cat should breathe, every cat will inherit that behavior from the Mammal class since Cat was defined as a subclass of Mammal. (In OO terminology, the smaller class is a subclass and the larger class is a superclass.) Hence from a programmer's standpoint, cats get the ability to breathe for free; after we add a speak method, our cats can both breathe and speak.
+
+ruby> tama = Cat.new
+   #<Cat:0xbd80e8>
+ruby> tama.breathe
+inhale and exhale
+   nil
+ruby> tama.speak
+Meow
+   nil
+There will be situations where certain properties of the superclass should not be inherited by a particular subclass. Though birds generally know how to fly, penguins are a flightless subclass of birds.
+
+ruby> class Bird
+    |   def preen
+    |     puts "I am cleaning my feathers."
+    |   end
+    |   def fly
+    |     puts "I am flying."
+    |   end
+    | end
+   nil
+ruby> class Penguin<Bird
+    |   def fly
+    |     fail "Sorry. I'd rather swim."
+    |   end
+    | end
+   nil
+Rather than exhaustively define every characteristic of every new class, we need only to append or to redefine the differences between each subclass and its superclass. This use of inheritance is sometimes called differential programming. It is one of the benefits of object-oriented programming.
+
+In a subclass, we can change the behavior of the instances by redefining superclass methods.
+
+ruby> class Human
+    |   def identify
+    |     puts "I'm a person."
+    |   end
+    |   def train_toll(age)
+    |     if age < 12
+    |       puts "Reduced fare.";
+    |     else
+    |       puts "Normal fare.";
+    |     end
+    |   end
+    | end
+   nil
+ruby> Human.new.identify
+I'm a person.
+   nil
+ruby> class Student1<Human
+    |   def identify
+    |     puts "I'm a student."
+    |   end
+    | end
+   nil
+ruby> Student1.new.identify
+I'm a student.
+   nil
+Suppose we would rather enhance the superclass's identify method than entirely replace it. For this we can use super.
+
+ruby> class Student2<Human
+    |   def identify
+    |     super
+    |     puts "I'm a student too."
+    |   end
+    | end
+   nil
+ruby> Student2.new.identify
+I'm a person.
+I'm a student too.
+   nil
+super lets us pass arguments to the original method. It is sometimes said that there are two kinds of people...
+
+ruby> class Dishonest<Human
+    |   def train_toll(age)
+    |     super(11) # we want a cheap fare.
+    |   end
+    | end
+   nil
+ruby> Dishonest.new.train_toll(25)
+Reduced fare. 
+   nil
+
+ruby> class Honest<Human
+    |   def train_toll(age)
+    |     super(age) # pass the argument we were given
+    |   end
+    | end
+   nil
+ruby> Honest.new.train_toll(25)
+Normal fare. 
+   nil
+
+
+The real world is filled by objects, and we can classify them. For example, a very small child is likely to say "bow-wow" when seeing a dog, regardless of the breed; we naturally see the world in terms of these categories.
+
+In OO programming terminology, a category of objects like "dog" is called a class, and some specific object belonging to a class is called an instance of that class.
+
+Generally, to make an object in ruby or any other OO language, first one defines the characteristics of a class, then creates an instance. To illustrate the process, let's first define a simple Dog class.
+
+ruby> class Dog
+    |   def speak
+    |     puts "Bow Wow"
+    |   end
+    | end
+   nil
+In ruby, a class definition is a region of code between the keywords class and end. A def inside this region begins the definition of a method of the class, which as we discussed in the previous chapter, corresponds to some specific behavior for objects of that class.
+
+Now that we have defined a Dog class, we can use it to make a dog:
+
+ruby> pochi = Dog.new
+   #<Dog:0xbcb90>
+We have made a new instance of the class Dog, and have given it the name pochi. The new method of any class makes a new instance. Because pochi is a Dog according to our class definition, it has whatever properties we decided a Dog should have. Since our idea of Dog-ness was very simple, there is just one trick we can ask pochi to do.
+
+ruby> pochi.speak
+Bow Wow
+   nil
+Making a new instance of a class is sometimes called instantiating that class. We need to have a dog before we can experience the pleasure of its conversation; we can't merely ask the Dog class to bark for us.
+
+ruby> Dog.speak
+ERR: (eval):1: undefined method `speak' for Dog:class
+It makes no more sense than trying to eat the concept of a sandwich.
+
+On the other hand, if we want to hear the sound of a dog without getting emotionally attached, we can create (instantiate) an ephemeral, temporary dog, and coax a little noise out of it before it disappears.
+
+ruby> (Dog.new).speak   # or more commonly, Dog.new.speak
+Bow Wow
+   nil
+"Wait," you say, "what's all this about the poor fellow disappearing afterwards?" It's true: if we don't bother to give it a name (as we did for pochi), ruby's automatic garbage collection decides it is an unwanted stray dog, and mercilessly disposes of it. Really it's okay, you know, because we can make all the dogs we want.
+
+Modules in ruby are similar to classes, except:
+
+A module can have no instances.
+A module can have no subclasses.
+A module is defined by module ... end.
+Actually... the Module class of module is the superclass of the Class class of class. Got that? No? Let's move on.
+
+There are two typical uses of modules. One is to collect related methods and constants in a central location. The Math module in ruby's standard library plays such a role:
+
+ruby> Math.sqrt(2)
+   1.41421
+ruby> Math::PI
+   3.14159
+The :: operator tells the ruby interpreter which module it should consult for the value of a constant (conceivably, some module besides Math might mean something else by PI). If we want to refer to the methods or constants of a module directly without using ::, we can include that module:
+
+ruby> include Math
+   Object
+ruby> sqrt(2)
+   1.41421
+ruby> PI
+   3.14159
+Another use of modules is called mixin. Some OO programming langages, including C++, allow multiple inheritance, that is, inheritance from more than one superclass. A real-world example of multiple inheritance is an alarm clock; you can think of alarm clocks as belonging to the class of clocks and also the class of things with buzzers.
+
+Ruby purposely does not implement true multiple inheritance, but the mixin technique is a good alternative. Remember that modules cannot be instantiated or subclassed; but if we include a module in a class definition, its methods are effectively appended, or "mixed in", to the class.
+
+Mixin can be thought of as a way of asking for whatever particular properties we want to have. For example, if a class has a working each method, mixing in the standard library's Enumerable module gives us sort and find methods for free.
+
+This use of modules gives us the basic functionality of multiple inheritance but allows us to represent class relationships with a simple tree structure, and so simplifies the language implementation considerably (a similar choice was made by the designers of Java).
+
+
+Earlier, we said that ruby has no functions, only methods. However there is more than one kind of method. In this chapter we introduce access controls.
+
+Consider what happens when we define a method in the "top level", not inside a class definition. We can think of such a method as analogous to a function in a more traditional language like C.
+
+ruby> def square(n)
+    |   n * n
+    | end
+   nil
+ruby> square(5)
+   25
+Our new method would appear not to belong to any class, but in fact ruby gives it to the Object class, which is a superclass of every other class. As a result, any object should now be able to use that method. That turns out to be true, but there's a small catch: it is a private method of every class. We'll discuss some of what this means below, but one consequence is that it may be invoked only in function style, as here:
+
+ruby> class Foo
+    |   def fourth_power_of(x)
+    |     square(x) * square(x)
+    |   end
+    | end
+  nil
+ruby> Foo.new.fourth_power_of 10
+  10000
+We are not allowed to explicitly apply the method to an object:
+
+ruby> "fish".square(5)
+ERR: (eval):1: private method `square' called for "fish":String
+This rather cleverly preserves ruby's pure-OO nature (functions are still object methods, but the receiver is self implicitly) while providing functions that can be written just as in a more traditional language.
+
+A common mental discipline in OO programming, which we have hinted at in an earlier chapter, concerns the separation of specification and implementation, or what tasks an object is supposed to accomplish and how it actually accomplishes them. The internal workings of an object should be kept generally hidden from its users; they should only care about what goes in and what comes out, and trust the object to know what it is doing internally. As such it is often helpful for classes to have methods that the outside world does not see, but which are used internally (and can be improved by the programmer whenever desired, without changing the way users see objects of that class). In the trivial example below, think of engine as the invisible inner workings of the class.
+
+ruby> class Test
+    |   def times_two(a)
+    |     puts "#{a} times two is #{engine(a)}"
+    |   end
+    |   def engine(b)
+    |     b*2
+    |   end
+    |   private:engine  # this hides engine from users
+    | end
+   Test
+ruby> test = Test.new
+   #<Test:0x4017181c>
+ruby> test.engine(6)
+ERR: (eval):1: private method `engine' called for #<Test:0x4017181c>
+ruby> test.times_two(6)
+6 times two is 12.
+   nil
+We might have expected test.engine(6) to return 12, but instead we learn that engine is inaccessible when we are acting as a user of a Test object. Only other Test methods, such as times_two, are allowed to use engine. We are required to go through the public interface, which consists of the times_two method. The programmer who is in charge of this class can change engine freely (here, perhaps by changing b*2 to b+b, assuming for the sake of argument that it improved performance) without affecting how the user interacts with Test objects. This example is of course much too simple to be useful; the benefits of access controls become more clear only when we begin to create more complicated and interesting classes.
+
+
+Profiling your Ruby program is a way of determining which methods are called and how long each method takes to complete. It's an important step in determining where your bottlenecks are so you can concentrate on the big time sinks when optimizing your code. If one method is taking 70% of the total program execution time, making this one method faster will do a lot more than improving the efficiency of several methods that only take 20% of the time.
+
+Profiling is Not Benchmarking
+
+Though related, profiling cannot be used as a benchmarking program. The profiling library itself slows the program down considerably, making it difficult to accurately benchmark the code. Though it may seem to be a counterintuitive mechanism used to measure the time it takes to execute a program, since it slows the program down uniformly, it's not. No matter how much the program is slowed down, the percentages should always be the same, and that's the important part.
+
+It's as Easy as -rprofile
+
+To run the Ruby profiler on any of your programs, simply require the profile library. This can be done either from the Ruby program itself, or from the command-line. The command-line method is preferred as it doesn't require making any modifications to your program. Simply run your program with the ruby command, adding -rprofile before your script name.
+
+The following example program reads a list of words from a file, finds a word in the file and prints the word as well as the 5 words in either direction. It's run through the profiler and the output is shown.
+
+ #!/usr/bin/env ruby
+ 
+ words = []
+ File.open(ARGV[0], 'r') do|file|
+   file.each do|w|
+     words << w.chomp.downcase
+   end
+ end
+ 
+ idx = words.index(ARGV[1])
+ words[idx] = "* #{words[idx]}"
+ puts words[ ((idx - 5) .. (idx + 5)) ]
+ 
+ $ ruby -rprofile 1.rb words ruby
+ rubik's
+ rubin
+ rubin's
+ rubinstein
+ rubinstein's
+ * ruby
+ ruby's
+ ruchbah
+ ruchbah's
+ rudolf
+ rudolf's
+   % cumulative self self total
+  time seconds seconds calls ms/call ms/call name
+  61.27 8.21 8.21 1 8210.00 12850.00 IO#each
+  13.58 10.03 1.82 98569 0.02 0.02 String#downcase
+  11.04 11.51 1.48 98569 0.02 0.02 String#chomp
+  10.00 12.85 1.34 98569 0.01 0.01 Array#<<
+   2.69 13.21 0.36 1 360.00 550.00 Array#index
+   1.42 13.40 0.19 14387 0.01 0.01 String#==
+   0.00 13.40 0.00 1 0.00 12850.00 IO#open
+   0.00 13.40 0.00 22 0.00 0.00 IO#write
+   0.00 13.40 0.00 4 0.00 0.00 Array#[]
+   0.00 13.40 0.00 1 0.00 0.00 IO#close
+   0.00 13.40 0.00 1 0.00 0.00 Array#[]=
+   0.00 13.40 0.00 1 0.00 0.00 Kernel.puts
+   0.00 13.40 0.00 1 0.00 0.00 Fixnum#+
+   0.00 13.40 0.00 1 0.00 0.00 Fixnum#-
+   0.00 13.40 0.00 11 0.00 0.00 Fixnum#==
+   0.00 13.40 0.00 1 0.00 0.00 File#initialize
+   0.00 13.40 0.00 1 0.00 13400.00 #toplevel
+ 
+The Output Table
+
+Each method called in the program is represented in the table. The method names are on the right and the total percentage of the time spent in the methods is on the left. The table is ordered by total percentage, so the most time-consuming methods are on the top.
+
+As you can see, the IO#each method is taking most of the time. This is from reading the file one line at a time. Since this method takes the longest, it could be sped up and made more efficient. Making this method more efficient will have the greatest impact on overall efficiency of the program. One possible way to speed up the IO#each method is the to read the entire file into a buffer and use String#split, thereby reducing the total number of IO calls made by the operating systems and more efficiently utilizing the operating system and hard drive's cache systems.
+
+You want to create two different versions of a method with the same name: two methods that differ in the arguments they take. However, a Ruby class can have only one method with a given name (if you define a method with the same name twice, the latter method definition prevails as seen in example p038or.rb in topic Ruby Overriding Methods). Within that single method, though, you can put logic that branches depending on how many and what kinds of objects were passed in as arguments.
+
+Here's a Rectangle class that represents a rectangular shape on a grid. You can instantiate a Rectangle by one of two ways: by passing in the coordinates of its top-left and bottom-right corners, or by passing in its top-left corner along with its length and width. There's only one initialize method, but you can act as though there were two.
+
+# The Rectangle constructor accepts arguments in either  
+# of the following forms:  
+#   Rectangle.new([x_top, y_left], length, width)  
+#   Rectangle.new([x_top, y_left], [x_bottom, y_right])  
+class Rectangle  
+  def initialize(*args)  
+    if args.size < 2  || args.size > 3  
+      # modify this to raise exception, later  
+      puts 'This method takes either 2 or 3 arguments'  
+    else  
+      if args.size == 2  
+        puts 'Two arguments'  
+      else  
+        puts 'Three arguments'  
+      end  
+    end  
+  end  
+end  
+Rectangle.new([10, 23], 4, 10)  
+Rectangle.new([10, 23], [14, 13])  
+The above program p037rectangle.rb is incomplete from the Rectangle class viewpoint, but is enough to demonstrate how method overloading can be achieved. Also remember that the initialize method takes in a variable number of arguments.
+
+Summary
+
+I have listed down all the important points you need to remember after you have completed the following topics: Including other files, Ruby Open Classes, Inheritance, Overriding Methods, Overloading Methods.
+
+The only easy way to change an object's state in Ruby is by calling one of its methods. Control access to the methods, and you have controlled access to the object. A good rule of the thumb is never to expose methods that could leave an object in an invalid state.
+
+Ruby gives you three levels of protection:
+
+Public methods can be called by everyone - no access control is enforced. A class's instance methods (these do not belong only to one object; instead, every instance of the class can call them) are public by default; anyone can call them. The initialize method is always private.
+Protected methods can be invoked only by objects of the defining class and its subclasses. Access is kept within the family. However, usage of protected is limited.
+Private methods cannot be called with an explicit receiver - the receiver is always self. This means that private methods can be called only in the context of the current object; you cannot invoke another object's private methods.
+Access control is determined dynamically, as the program runs, not statically. You will get an access violation only when the code attempts to execute the restricted method. Let us refer to the program p047classaccess.rb below:
+
+# p047classaccess.rb  
+class ClassAccess  
+  def m1          # this method is public  
+  end  
+  protected  
+    def m2        # this method is protected  
+    end  
+  private  
+    def m3        # this method is private  
+    end  
+end  
+ca = ClassAccess.new  
+ca.m1  
+#ca.m2  
+#ca.m3  
+If you remove the comments of the last two statements in the above program, you will get an access violation runtime error.
+
+Alternatively, you can set access levels of named methods by listing them as arguments to the access control functions.
+
+class ClassAccess  
+  def m1       # this method is public  
+  end  
+  public :m1  
+  protected :m2, :m3  
+  private :m4, :m5  
+end  
+Here is an example (p047zclassaccess.rb) for 'protected' access control:
+
+# p047zclassaccess.rb  
+class Person  
+  def initialize(age)  
+    @age = age  
+  end  
+  def age  
+    @age  
+  end  
+  def compare_age(c)  
+    if c.age > age  
+      "The other object's age is bigger."  
+    else  
+      "The other object's age is the same or smaller."  
+    end  
+  end  
+  protected :age  
+end  
+  
+chris = Person.new(25)  
+marcos = Person.new(34)  
+puts chris.compare_age(marcos)  
+#puts chris.age  
+The output is:
+
+>ruby p047zclassaccess.rb  
+The other object's age is bigger.  
+>Exit code: 0  
+In the preceding example, we compare one Person instance with another Person instance. The comparison, however, depends on the result of a call to the method age. The object doing the comparing (chris, in the example) has to ask the other object (marcos) to execute its age method. So, age can't be private.
+
+That's where the protected level comes in. With age protected rather than private, chris can ask marcos to execute age, because chris and marcos are both instances of the same class. But if you try to call the age method of a Person object when self is anything other than a Person object, the method will fail.
+
+A protected method is thus like a private method, but with an exemption for cases where the class of self (chris) and the class of the object having the method called on it (marcos) are the same.
+
+Note that if you remove the comment from the last statement in the program ie. when you use age directly, Ruby throws an exception.
+
+In Ruby, public, private and protected apply only to methods. Instance and class variables are encapsulated and effectively private, and constants are effectively public. There is no way to make an instance variable accessible from outside a class (except by defining an accessor method). And there is no way to define a constant that is inaccessible to outside use.
+
+Overriding private methods
+
+Private methods cannot be invoked from outside the class that defines them. But they are inherited by subclasses. This means that subclasses can invoke them and can override them.
+
+Classes often use private methods as internal helper methods. They are not part of the public API of the class and are not intended to be visible. If you happen to define a method in your subclass that has the same name as a private method in the superclass, you will have inadvertently overridden the superclass's internal utility method, and this will almost certainly cause unintended behavior.
+
+Accessor methods
+
+Encapsulation is achieved when the instance variables are private to an object and you have public getters and setters (in Ruby, we call them attribute readers and attribute writers). To make instance variables available, Ruby provides accessor methods that return their values. The program p048accessor.rb illustrates the same.
+
+# p048accessor.rb  
+# First without accessor methods  
+class Song  
+  def initialize(name, artist)  
+    @name     = name  
+    @artist   = artist  
+  end  
+  def name  
+    @name  
+  end  
+  def artist  
+    @artist  
+  end  
+end  
+  
+song = Song.new("Brazil", "Ivete Sangalo")  
+puts song.name  
+puts song.artist  
+  
+# Now, with accessor methods  
+class Song  
+  def initialize(name, artist)  
+    @name     = name  
+    @artist   = artist  
+  end  
+  attr_reader :name, :artist  # create reader only  
+  # For creating reader and writer methods  
+  # attr_accessor :name  
+  # For creating writer methods  
+  # attr_writer :name  
+  
+end  
+  
+song = Song.new("Brazil", "Ivete Sangalo")  
+puts song.name  
+puts song.artist  
+Are instance variables inherited by a sub-class?
+David Black, the author of Ruby for Rails, has this to say: Instance variables are per-object, not per-class, and they're not inherited. But if a method uses one, and that method is available to subclasses, then it will still use the variable -- but "the variable" in the sense of one per object. See the following program - p049instvarinherit.rb:
+
+# p049instvarinherit.rb  
+class C  
+  def initialize  
+    @n = 100  
+  end  
+  
+  def increase_n  
+    @n *= 20  
+  end  
+end  
+  
+class D < C  
+  def show_n  
+    puts "n is #{@n}"  
+  end  
+end  
+  
+d = D.new  
+d.increase_n  
+d.show_n  
+The output is:
+
+>ruby p049instvarinherit.rb  
+n is 2000  
+>Exit code: 0  
+The @n in D's methods is the same (for each instance) as the one in C.
+
+All Ruby objects have a set of instance variables. These are not defined by the object's class - they are simply created when a value is assigned to them. Because instance variables are not defined by a class, they are unrelated to subclassing and the inheritance mechanism.
+
+Top-level methods
+
+When you write code at the top level, Ruby provides you automatically with a default self. This object is a direct instance of Object. When you ask it to describe itself:
+
+puts self  
+it says:
+
+main  
+The object main is the current object as soon as your program starts up.
+
+Suppose you define a method at the top level:
+
+def talk  
+  puts "Hello"  
+end  
+Who, or what, does the method belong to? It's not inside a class or module definition block, so it doesn't appear to be an instance method of a class or module. It's not attached to any particular object (as in def obj.talk). What is it? When we define top-level methods, we're actually creating (private) instance methods for class Object.
+
+Because top-level methods are private, you can't call them with an explicit receiver; you can only call them by using the implied receiver, self. That means self must be an object on whose method search path the given top-level method lies. But every object's search path includes the Kernel module, because the class Object mixes in Kernel, and every object's class has Object as an ancestor. That means you can always call any top-level method, wherever you are in your program. It also means you can never use an explicit receiver on a top-level method.
+
+From our earliest examples onward, we've been making bareword-style calls to puts and print, like this one:
+
+puts 'Hello'  
+puts and print are built-in private instance methods of Kernel. That's why you can - indeed, must - call them without a receiver.
+
+
+Method overriding, in object oriented programming, is a language feature that allows a subclass to provide a specific implementation of a method that is already provided by one of its superclasses. The implementation in the subclass overrides (replaces) the implementation in the superclass.
+
+Here's an example p037xmtdovride.rb:
+
+class A  
+  def a  
+    puts 'In class A'  
+  end  
+end  
+  
+class B < A  
+  def a  
+    puts 'In class B'  
+  end  
+end  
+  
+b = B.new  
+b.a  
+The method a in class B overrides the method a in class A.
+
+Usage of super
+
+The way super handles arguments is as follows:
+
+When you invoke super with no arguments Ruby sends a message to the parent of the current object, asking it to invoke a method of the same name as the method invoking super. It automatically forwards the arguments that were passed to the method from which it's called.
+Called with an empty argument list - super()-it sends no arguments to the higher-up method, even if arguments were passed to the current method.
+Called with specific arguments - super(a, b, c) - it sends exactly those arguments.
+An example (p038bicycle.rb) from Ruby for Rails book highlights this:
+
+class Bicycle  
+  attr_reader :gears, :wheels, :seats  
+  def initialize(gears = 1)  
+    @wheels = 2  
+    @seats = 1  
+    @gears = gears  
+  end  
+end  
+  
+class Tandem < Bicycle  
+  def initialize(gears)  
+    super  
+    @seats = 2  
+  end  
+end  
+t = Tandem.new(2)  
+puts t.gears  
+puts t.wheels  
+puts t.seats  
+b = Bicycle.new  
+puts b.gears  
+puts b.wheels  
+puts b.seats  
+The output is:
+
+>ruby p038bicycle.rb  
+2  
+2  
+2  
+1  
+2  
+1  
+>Exit code: 0  
+We shall be talking in depth about attr_reader later.
+
+Redefining Methods
+
+(Adapted from David Black's book, Ruby For Rails)
+
+Nothing stops you from defining a method twice. Program p038or.rb
+
+class OR  
+  def mtd  
+    puts "First definition of method mtd"  
+  end  
+  def mtd  
+    puts "Second definition of method mtd"  
+  end  
+end  
+OR.new.mtd  
+What happens when we call mtd on an instance of OR? Let's find out:
+
+OR.new.mtd  
+The printed result is the Second definition of method mtd. The second definition has prevailed: We see the output from that definition, not from the first. Nothing stops you from defining a method twice, however the new version takes precedence.
+
+Abstract class
+
+In Ruby, we can define an abstract class that invokes certain undefined "abstract" methods, which are left for subclasses to define. For example:
+
+# This class is abstract; it doesn't define hello or name  
+# No special syntax is required: any class that invokes methods  
+# that are intended for a subclass to implement is abstract  
+class AbstractKlass  
+  def welcome  
+    puts "#{hello} #{name}"  
+  end  
+end  
+  
+# A concrete class  
+class ConcreteKlass < AbstractKlass  
+  def hello; "Hello"; end  
+  def name; "Ruby students"; end  
+end  
+  
+ConcreteKlass.new.welcome # Displays "Hello Ruby students"
+
+Inheritance is a relation between two classes. We know that all cats are mammals, and all mammals are animals. The benefit of inheritance is that classes lower down the hierarchy get the features of those higher up, but can also add specific features of their own. If all mammals breathe, then all cats breathe. In Ruby, a class can only inherit from a single other class. Some other languages support multiple inheritance, a feature that allows classes to inherit features from multiple classes, but Ruby doesn't support this.
+
+We can express this concept in Ruby - see the p033mammal.rb program below:
+
+class Mammal  
+  def breathe  
+    puts "inhale and exhale"  
+  end  
+end  
+  
+class Cat < Mammal  
+  def speak  
+    puts "Meow"  
+  end  
+end  
+  
+rani = Cat.new  
+rani.breathe  
+rani.speak  
+Though we didn't specify how a Cat should breathe, every cat will inherit that behaviour from the Mammal class since Cat was defined as a subclass of Mammal. (In OO terminology, the smaller class is a subclass and the larger class is a super-class. The subclass is sometimes also known as a derived or child class and the super-class as base or parent class). Hence from a programmer's standpoint, cats get the ability to breathe for free; after we add a speak method, our cats can both breathe and speak.
+
+There will be situations where certain properties of the super-class should not be inherited by a particular subclass. Though birds generally know how to fly, penguins are a flightless subclass of birds. In the example p034bird.rb below, we override fly in class Penguin:
+
+class Bird  
+  def preen  
+    puts "I am cleaning my feathers."  
+  end  
+  def fly  
+    puts "I am flying."  
+  end  
+end  
+  
+class Penguin < Bird  
+  def fly  
+    puts "Sorry. I'd rather swim."  
+  end  
+end  
+  
+p = Penguin.new  
+p.preen  
+p.fly  
+Rather than exhaustively define every characteristic of every new class, we need only to append or to redefine the differences between each subclass and its super-class. This use of inheritance is sometimes called differential programming. It is one of the benefits of object-oriented programming.
+
+The above two programs are taken from the online Ruby User's Guide.
+
+Thus, Inheritance allows you to create a class that is a refinement or specialization of another class. Inheritance is indicated with <.
+
+Here's another example, p035inherit.rb
+
+class GF  
+  @m =10  
+  puts @m.object_id  
+  def initialize  
+    puts 'In GF class'  
+  end  
+  def gfmethod  
+    puts 'GF method call'  
+  end  
+end  
+  
+# class F sub-class of GF  
+class F < GF  
+  def initialize  
+    super  
+    puts 'In F class'  
+  end  
+end  
+  
+# class S sub-class of F  
+class S < F  
+  def initialize  
+    super  
+    puts @m  
+    puts @m.object_id  
+    puts 'In S class'  
+  end  
+end  
+son = S.new  
+son.gfmethod  
+A class can only inherit from one class at a time (i.e. a class can inherit from a class that inherits from another class which inherits from another class, but a single class can not inherit from many classes at once).
+
+There are many classes and modules (more on this later) built into the standard Ruby language. They are available to every Ruby program automatically; no require is required. Some built-in classes are Array, Bignum, Class, Dir, Exception, File, Fixnum, Float, Integer, IO, Module, Numeric, Object, Range, String, Thread, Time. Some built-in modules are Comparable, Enumerable, GC, Kernel, Math.
+
+The Object class is the parent class of all classes in Ruby. Its methods are therefore available to all objects unless explicitly overridden. In Ruby 1.9, Object is no longer the root of the class hierarchy. A new class named BasicObject serves that purpose, and Object is a subclass of BasicObject. BasicObject is a very simple class, with almost no methods of its own. When you create a class in Ruby 1.9, you still extend Object unless you explicitly specify the superclass, and most programmers will never need to use or extend BasicObject.
+
+In Ruby, initialize is an ordinary method and is inherited like any other.
+
+IN RAILS: Inheritance is one of the key organizational techniques for Rails program design and the design of the Rails framework.
+
+Inheritance and Instance Variables
+
+Consider the code:
+
+class Dog  
+  def initialize(breed)  
+    @breed = breed  
+  end  
+end  
+  
+class Lab < Dog  
+  def initialize(breed, name)  
+    super(breed)  
+    @name = name  
+  end  
+  
+  def to_s  
+    "(#@breed, #@name)"  
+  end  
+end  
+  
+puts Lab.new("Labrador", "Benzy").to_s  
+The to_s method in class Lab references @breed variable from the superclass Dog. This code works as you probably expect it to:
+
+puts Lab.new("Labrador", "Benzy").to_s ==> (Labrador, Benzy)  
+Because this code behaves as expected, you may be tempted to say that these variables are inherited. That is not how Ruby works.
+
+All Ruby objects have a set of instance variables. These are not defined by the objects's class - they are simply created when a value is assigned to them. Because instance variables are not defined by a class, they are unrelated to subclassing and the inheritance mechanism.
+
+In the above code, Lab defines an initialize method that chains to the initialize method of its superclass. The chained method assigns values to the variable @breed, which makes those variables come into existence for a particular instance of Lab.
+
+The reason that they sometimes appear to be inherited is that instance variables are created by the methods that first assign values to them, and those methods are often inherited or chained.
+
+Since instance variables have nothing to do with inheritance, it follows that an instance variable used by a subclass cannot "shadow" an instance variable in the superclass. If a subclass uses an instance variable with the same name as a variable used by one of its ancestors, it will overwrite the value of its ancestor's variable.
+
+Blocks are not objects, but they can be converted into objects of class Proc. This can be done by calling the lambda method of the module Kernel. A block created with lambda acts like a Ruby method. If you don't specify the right number of arguments, you can't call the block.
+
+prc = lambda {"hello"}  
+Proc objects are blocks of code that have been bound to a set of local variables. The class Proc has a method call that invokes the block. The program p024proccall.rb illustrates this.
+
+# Blocks are not objects  
+# they can be converted into objects of class Proc by calling lambda method  
+prc = lambda {puts 'Hello'}  
+# method call invokes the block  
+prc.call  
+  
+# another example  
+toast = lambda do  
+  puts 'Cheers'  
+end  
+toast.call  
+The output is:
+
+>ruby p024proccall.rb  
+Hello  
+Cheers  
+>Exit code: 0  
+Remember you cannot pass methods into other methods (but you can pass procs into methods), and methods cannot return other methods (but they can return procs).
+
+The next example shows how methods can take procs. Example p025mtdproc.rb
+
+=begin  
+  You cannot pass methods into other methods (but you can pass procs into methods),  
+  and methods cannot return other methods (but they can return procs)  
+=end  
+  
+def some_mtd some_proc  
+  puts 'Start of mtd'  
+  some_proc.call  
+  puts 'End of mtd'  
+end  
+  
+say = lambda do  
+  puts 'Hello'  
+end  
+  
+some_mtd say  
+The output is:
+
+>ruby p025mtdproc.rb  
+Start of mtd  
+Hello  
+End of mtd  
+>Exit code: 0  
+Here's another example of passing arguments using lambda.
+
+aBlock = lambda { |x| puts x }  
+aBlock.call 'Hello World!'  
+# output is: Hello World!  
+
+
+Let’s start with an example:
+
+# program1.rb
+for i in [1,2,3,4]
+  puts i
+end
+
+a = 0
+b = [1,2,3,4]
+while a < b.length
+  puts b[a]
+  a += 1
+end
+These are very simple iterators, similar to what we have in several languages. The first one with a ‘for‘ construct and the second with the familiar ‘while‘ statement. Nothing fancy here. But let’s see another way of accomplishing the same thing in Ruby:
+
+# program2.rb
+[1,2,3,4].each { |i| puts i }
+
+[1,2,3,4].each do |i|
+  puts i
+end
+Not too shabby, simpler and elegant, but that’s where people start gasping. The pipes notation is particularly threatening for non-starters. Both the brackets and the do..end notations define an enclosed piece of code that we name as ‘blocks’ or ‘closures’. What’s between the pipes are like parameters to a method. It ‘feels’ like this pseudo-code:
+
+def unnamed_method(i)
+  puts i
+end
+
+[1,2,3,4].each(unnamed_method)
+This is not valid Ruby code, of course. That’s similar to what we would do in C# with delegates. We have something similar in JavaScript (using the “Prototype”:http://www.prototypejs.org/api/enumerable/each library):
+
+[1,2,3,4].each(function(i) {
+  alert(i);
+});
+In Javascript functions are first-class citizens of the language and they can be defined anonymously (without a name), and then passed as parameters to another function. We can manipulate and move functions all over the place.
+
+Ruby doesn’t have methods as first-class citizens. We actually can extract a method from an object and wrap it around a ‘Method‘ object, but it holds the context of its object, so it is not independent.
+
+# program3.rb
+class Test
+  def initialize
+    @hello = "Hello!"
+  end
+  def say
+    @hello
+  end
+end
+
+m = Test.new.method(:say)
+puts m.call # => "Hello!"
+puts m.class # => "Method"
+Here, we extracted the :say method from the instantiated Test instance. Notice that we can now manipulate the method as a normal object. Whenever we send the ‘call‘ message to the method object, it runs as if it was being executed from the context of the original object (Test.new.say). In the above example the second last statement would successfully print “Hello!”, as stored in the local instance variable @hello.
+
+Although simple, we don’t do this very often. That’s because this method is bound to the original object’s context and we don’t usually want that: it would be nice to have an independent block of code. So, let’s create one very simple block of code referenced by a variable:
+
+# program4.rb
+c = lambda { |i| puts i }
+c.call(1) # => 1
+c.call(2) # => 2
+The ‘lambda‘ keyword encloses the code within brackets as an object block, an instance of the Proc class. This object responds to the ‘call‘ method. In the last two statements we pass parameters to the ‘call‘ method and it goes to the ‘i’ variable defined within pipes inside the block. So, it acts as an independent entity, detached from any particular class. Let’s test it:
+
+# program5.rb
+c = lambda { |i| puts i }
+
+class Test
+  def say(block)
+    block.call(self.class)
+  end
+end
+
+c.call(self.class) # => Object
+Test.new.say(c)    # => Test
+We’re using the same block defined above in the variable ‘c’. After the definition of the Test class, we call the block object passing ‘self.class’ and it returns Object as a result. Then, we call the :say method from inside an instance of the Test class. The :say method calls the block giving the inner ‘self.class’ as a block parameter. In this case it prints out ‘Test’ instead of ‘Object‘, meaning that the block binds itself to the enclosing scope. That’s one difference between a block and a detached object method.
+
+In many ways, Blocks resembles anonymous functions from Javascript, anonymous delegates from C#, anonymous inner classes from Java. This is a very useful construct that was primarily created to better handle iterators. For instance:
+
+# program6.rb
+[1,2,3,4].reverse_each { |i| puts i }
+# => 4
+# => 3
+# => 2
+# => 1
+Now, this is different from the Array’s ‘each‘ method we used before. ‘reverse_each‘ navigates backwards through the Array’s elements. It gets each element and passes it into the ‘i’ variable, set as a parameter for the block defined within brackets.
+
+In languages like Java, everything has to be defined through an interface. Enumerators are no different, and we have interfaces like ‘Iterator’. This method defines simple methods as ‘hasNext()’ and ‘next()’. But what if we actually need something as a reverse iterator? Now we’re on our own. What if we need something more complicated like an iterator that only walks through even elements? In Ruby we can define such a method like this:
+
+# program7.rb
+class Array
+  def even
+    i = 0
+    while i < self.size
+      yield(self[i]) if i % 2 == 0
+      i += 1
+    end
+  end
+end
+
+[1,2,3,4,5,6].even { |i| puts i }
+# => 1
+# => 3
+# => 5
+First of all, remember that Ruby’s classes are all open, so we can easily redefine the standard Array class and append new methods to it. Now pay attention to the ‘even’ method. We implement it the usual way with a ‘while’ loop. But the interesting bit is the ‘yield‘ keyword. Pretend that it works like a *wildcard placeholder* for blocks. In the example, when we pass the ‘self[i]‘ value as its parameter, we’re actually passing this value to the ‘i’ parameter in the block.
+
+We can rewrite this method in a slightly different way but with the same behavior:
+
+# program8.rb
+class Array
+  def even(&code)
+    i = 0
+    while i < self.size
+      code.call( self[i] ) if i % 2 == 0
+      i += 1
+    end
+  end
+end
+So, now we explicitly defined that the ‘even’ method expects to receive a block, converting it to the ‘code’ parameter. Then, inside it we send the ‘call‘ method to ‘code’ and pass ‘self[i]‘ as its parameter. The result is exactly the same as using the yield keyword.
+
+We can still do it differently:
+
+# program9.rb
+class Array
+  def even(block)
+    i = 0
+    while i < self.size
+      block.call( self[i] ) if i % 2 == 0
+      i += 1
+    end
+  end
+end
+Now we’re doing it without the ampersand in the parameter. In the previous example, the ampersand operator ‘captures’ a block into a Proc instance object. In the latest example, the ‘even’ method expects to directly receive a Proc object, like this:
+
+# program10.rb
+class Array
+  def even(block)
+    i = 0
+    while i < self.size
+      block.call( self[i] ) if i % 2 == 0
+      i += 1
+    end
+  end
+end
+c = lambda { |i| puts i }
+[1,2,3,4,5,6].even( c )
+Let’s go back to the Array’s ‘each‘ method as we displayed before:
+
+c = lambda { |i| puts i }
+[1,2,3,4].each( &c )
+A little bit different, because the ‘each‘ method doesn’t expect a Proc object as a parameter, but an actual Block. So we use the ampersand before the Proc instance variable and it kind of ‘expands’ it back into a ‘raw’ code block, so that the ‘even’ method can ‘yield’ it inside, instead of executing through the ‘call‘ method.
+
+This usage of a Proc object is not as elegant as just passing a Block, but with this construct we are storing code within an object. We can define a method that receives as many blocks as we need, for instance:
+
+# program11.rb
+def foo(name, block1, block2)
+  block1.call
+  puts name
+  block2.call
+end
+
+foo "Fabio", lambda { puts "Hello" }, lambda { puts "World" }
+This example receives a normal parameter and 2 blocks instead of one. We can pass blocks as enclosed Proc objects in the parameters list as we would do with any other kind of object. We usually don’t need that many discrete blocks inside a single method. The most usual style is:
+
+# program12.rb
+def foo( param1, param2 )
+  # do something
+  some_param = 1
+  yield( some_param ) if block_given?
+end
+
+foo(1, 2) do |some_param|
+  # do something
+end
+So we define a normal method, with normal parameters. But inside it we ask ‘block_given?‘. If positive, it ‘yields’ its block passing some parameter to it (of course, parameters are optional, and you can pass as many parameters as you want to a block, even zero parameters).
+
+We call the defined method as usual, passing a block at the end of the method call. By the way, here’s another way of defining a block: using the do .. end construct. There is no strict rule, but we reserve the brackets notation when the block is small and we can state it in a single line, and the do .. end notation when we have blocks with multiple statements inside.
+
+There’s a gotcha:
+
+foo a, b do |some_param|
+  # do something
+end
+
+foo a, b { |some_param| # do something }
+Both brackets and do .. end constructs define blocks, so at first glance the 2 above statements seems to do the same thing. But the gotcha is that in Ruby parenthesis are optional, and we’re not using them here.
+
+In the first statement the block is assumed to be passed to the ‘foo’ method as expected, with ‘a’ and ‘b’ as normal parameters. But the second statement guesses that ‘b’ is a method and tries to pass the block to it. The recommendation is: if you have a method that needs both parameters and a block, enclose the parameters within parenthesis to avoid ambiguities.
+
+We now understand that Blocks are pieces of code that can be exchanged between method calls, as parameters or returned values. But there is more to it:
+
+# program13.rb
+c = lambda { |i| puts i }
+c = Proc.new { |i| puts i }
+c = proc { |i| puts i }
+The above 3 statements do the same thing: instantiate a block object. ‘proc’ is an alias for ‘lambda‘ and they work slightly different than ‘Proc.new‘. In Ruby 1.9, ‘proc’ will probably be an alias for ‘Proc.new‘ instead.
+
+Keywords to keep in mind are:
+
+lambda/Proc.new – encloses a bunch of code inside a Proc instance.
+& – ampersand, either captures a ‘raw’ code block into a Proc object or expands the Proc object as a ‘raw’ block.
+{}/do..end – defines a code block.
+|| – pipes, defines the parameters of a block. If you don’t need any, just omit the pipes altogether.
+So, some people misinterpret Blocks as a simple function pointer, or something like Java’s anonymous inner class. That’s not the case: and here we finally boil down to “Closures”. Ruby Blocks are Closures. The words ‘blocks’ and ‘closures’ mean the same thing in Ruby.
+
+Ruby Blocks can enclose not only code and it’s own inner local variables, but it can enclose the surrounding context variables. That’s why it is called a ‘closure’. Let’s see an example:
+
+# program14.rb
+def greetings_factory(prefix)
+  Proc.new { |name| "#{prefix}, #{name} !"}
+end
+
+birthday = greetings_factory("Happy Birthday")
+xmas = greetings_factory("Merry XMas")
+
+puts birthday.call("David") # => "Happy Birthday, David !"
+puts xmas.call("Matz")      # => "Merry XMas, Matz !"
+The first thing is a method definition for ‘greetings_factory’. It gets a prefix as a parameter and returns a Proc object, whose inner parameter is a name. So far so good.
+
+The second part defines 2 Proc instances, one for birthday and another for christmas. Notice that we pass 2 different prefixes into the ‘greetings_factory’ method. The different values are ‘closed’ within Block. So, when we later call them, we see how differently they behave: they actually stored the latest state within itself. So each block stored the ‘prefix’ variable passed before, while still accepting the ‘name’ parameter within the Block.
+
+Keep in mind that every Ruby Block is a Closure, that’s why this construct actually works:
+
+# program15.rb
+list = []
+[1,2,3,4].each do |i|
+  list << i * 2
+end
+puts list.inspect # => [2, 4, 6, 8]
+So, we defined a ‘list’ array *before* we create the iterator block. Then, inside the block we refer to the external ‘list’ array and populate it. In Java, this would’ve been a final variable, but in Ruby there is no such limitation.
+
+You’d want to be very careful about the surroundings of your block: do not define variables that’s going to be used inside the blocks too early in the code. Try to keep dependencies nearby, like in the above example where the ‘list’ Array is defined right before the iterator itself.
+
+Iterators get a big boost because we’re not limited to a hard Interface. We can add whatever methods we need, like ‘each’, ‘reverse_each’, ‘collect’, ‘select’ and so on. Each one of them can receive a block and pass one element at a time to the user-defined block.
+
+Another very important usage is to enclose widely used code patterns. For example, Rails has the following construct to use database transactions:
+
+User.transaction do
+  u = User.new(:login => 'admin')
+  u.save!
+end
+‘User’ would be the ActiveRecord instance. One example of the structure for the model’s ‘transaction’ class method would resemble this structure:
+
+class ActiveRecord::Base
+  def self.transaction
+    begin
+      ActiveRecord::Base.establish_connection
+      yield if block_given?
+    rescue => e
+      RAILS_DEFAULT_LOGGER.error e
+    ensure
+      ActiveRecord::Base.remove_connection
+    end
+  end
+end
+This means: open the database then try to ‘yield’ the block if provided. If anything wrong happens, get the error message and log it. Finally ensure that the connection is dropped after all this.
+
+An Array is just a list of items in order (like mangoes, apples, and oranges). Every slot in the list acts like a variable: you can see what object a particular slot points to, and you can make it point to a different object. You can make an array by using square brackets In Ruby, the first value in an array has index 0. The size and length methods return the number of elements in an array. The last element of the array is at index size-1. Negative index values count from the end of the array, so the last element of an array can also be accessed with an index of -1. If you attempt to read an element beyond the end of an array (with an index >= size) or before the beginning of an array (with an index < -size), Ruby simply returns nil and does not throw an exception. Ruby's arrays are mutable - arrays are dynamically resizable; you can append elements to them and they grow as needed. Let us look at the following example p018arrays.rb. Please go through the program carefully.
+
+# p018arrays.rb  
+# Arrays  
+  
+# Empty array  
+var1 = []  
+# Array index starts from 0  
+puts var1[0]  
+  
+# an array holding a single number  
+var2 = [5]  
+puts var2[0]  
+  
+# an array holding two strings  
+var3 = ['Hello', 'Goodbye']  
+puts var3[0]  
+puts var3[1]  
+  
+flavour = 'mango'  
+# an array whose elements are pointing  
+# to three objects - a float, a string and an array  
+var4 = [80.5, flavour, [true, false]]  
+puts var4[2]  
+  
+# a trailing comma is ignored  
+name = ['Satish', 'Talim', 'Ruby', 'Java',]  
+puts name[0]  
+puts name[1]  
+puts name[2]  
+puts name[3]  
+# the next one outputs nil  
+# nil is Ruby's way of saying nothing  
+puts name[4]  
+# we can add more elements too  
+name[4] = 'Pune' 
+puts name[4] 
+# we can add anything! 
+name[5] = 4.33 
+puts name[5] 
+# we can add an array to an array 
+name[6] = [1, 2, 3] 
+puts name[6] 
+ 
+# some methods on arrays 
+newarr = [45, 23, 1, 90] 
+puts newarr.sort 
+puts newarr.length 
+puts newarr.first 
+puts newarr.last 
+ 
+# method each (iterator) - extracts each element into lang 
+# do end is a block of code 
+# we shall talk about blocks soon here - 
+# http://rubylearning.com/satishtalim/ruby_blocks_and_procs.html 
+# variable lang refers to each item in the array as it goes through the loop 
+languages = ['Pune', 'Mumbai', 'Bangalore'] 
+ 
+languages.each do |lang| 
+  puts 'I love ' + lang + '!' 
+  puts 'Don\'t you?'  
+end  
+  
+# delete an entry in the middle and shift the remaining entries  
+languages.delete('Mumbai')  
+languages.each do |lang|  
+  puts 'I love ' + lang + '!'  
+  puts 'Don\'t you?'  
+end  
+The method each (for any object) allows us to do something (whatever we want) to each object the array points to. In the example, we are able to go through each object in the array without using any numbers. Here are a few things to remember:
+
+The variable lang inside the "goalposts" refers to each item in the array as it goes through the loop. You can give this any name you want, but make it memorable.
+The do and end identify a block of code that will be executed for each item. Blocks are used extensively in Ruby.
+Here's an interesting example of a method that returns an array. Example p019mtdarry.rb
+
+# p019mtdarry.rb  
+# if you give return multiple parameters,  
+# the method returns them in an array  
+# The times method of the Integer class iterates block num times,  
+# passing in values from zero to num-1  
+  
+def mtdarry  
+  10.times do |num|  
+    square = num * num  
+    return num, square if num > 5  
+  end  
+end  
+  
+# using parallel assignment to collect the return value  
+num, square = mtdarry  
+puts num  
+puts square  
+The output is:
+
+>ruby p019mtdarry.rb  
+6  
+36  
+>Exit code: 0  
+The times method of the Integer class iterates block num times, passing in values from zero to num-1. As we can see, if you give return multiple parameters, the method returns them in an array. You can use parallel assignment to collect this return value.
+
+Parallel Assignment
+
+To explain this, we'll use the terms lvalue and rvalue. An lvalue is something that can appear on its own on the left-hand side of an assignment (a variable, constant, or attribute setter method). An rvalue is something that can appear on its own on the right hand side. Ruby lets you have a comma-separated list of rvalues. Once Ruby sees more than one rvalue in an assignment, the rules of parallel assignment come into play. First, all the rvalues evaluated, left to right, and collected into an array (unless they are already an array). This array will be the eventual value returned by the overall assignment. Next, the left hand side (lhs) is inspected. If it contains a single element, the array is assigned to that element.
+
+a = 1, 2, 3, 4 # => a == [1, 2, 3, 4]  
+b = [1, 2, 3, 4] # => b == [1, 2, 3, 4]  
+If the lhs contains a comma, Ruby matches values on the rhs against successive elements on the lhs. Excess elements are discarded.
+
+a, b = 1, 2, 3, 4 # => a == 1, b == 2  
+c, = 1, 2, 3, 4 # => c == 1  
+Environment Variables
+
+An environment variable is a link between our program and the outside world. An environment variable is essentially a label referring to a piece of text; and can be used to store configuration information such as paths, usernames, and so on. You can access operating system environment variables using the predefined variable ENV.
+
+ENV.each {|k,v| puts "#{k}: #{v}"}  
+Ruby sets ENV to the environment variables. After that, iteration proceeds with each. This time, the block takes two parameters: k (key) and v (value). Blocks are a completely general mechanism and can take any number of arguments.
+
+The values of some environment variables are read by Ruby when it first starts. These variables modify the behavior of the interpreter, as shown below.
+
+
+
+A Ruby program may write to the ENV object. On most systems this changes the values of the corresponding environment variables. However, this change is local to the process that makes it and to any subsequently spawned child processes. A subprocess changes an environment variable, and this change is inherited by a process that it then starts. However, the change is not visible to the original parent. (This just goes to prove that parents never really know what their children are doing.)
+
+ENV["course"] = "FORPC101"  
+puts "#{ENV['course']}"  
+Command-line arguments
+
+If you're starting a program from the command line, you can append parameters onto the end of the command and the program processes them.
+
+You can do the same with your Ruby application. Ruby automatically places any parameters that are appended to the command line when you launch your Ruby program into a special array called ARGV. If your program is:
+
+f = ARGV[0]  
+puts f  
+You can execute this program from the command line as:
+
+ruby tmp.rb 23  
+The program should display 23.
+
+Library GetoptLong
+
+Class GetoptLong supports command-line option parsing. Options may be a minus sign (-) followed by a single character, or two minus signs (--) followed by a name (a long option). Options may be given in any order. A single internal option may have multiple external representations. For example, the option to control verbose output could be any of -v, --verbose, or --details. Some options may also take an associated value. Each internal option is passed to GetoptLong as an array, containing strings representing the option's external forms and a flag. The flag specifies how GetoptLong is to associate an argument with the option (NO_ARGUMENT, REQUIRED_ARGUMENT, or OPTIONAL_ARGUMENT).
+
+Suppose I want to call a Ruby program as:
+
+ruby tsftpc.rb -hftp.ibiblio.org -n21 -uanonymous -ps@s.com  
+Here's the code to do so:
+
+require 'getoptlong'  
+  
+# Call using "ruby tsftpc.rb -hftp.ibiblio.org -n21 -uanonymous -ps@s.com"  
+# The parameters can be in any order  
+unless ARGV.length == 4  
+  puts "Usage: ruby tsftpc.rb -hftp_site_url -nport_no -uuser_name -ppassword"  
+  exit  
+end  
+  
+host_name = port_no = user_name = password = ''  
+# specify the options we accept and initialize  
+# the option parser  
+opts = GetoptLong.new(  
+[ "--hostname", "-h", GetoptLong::REQUIRED_ARGUMENT ],  
+[ "--port", "-n", GetoptLong::REQUIRED_ARGUMENT ],  
+[ "--username", "-u", GetoptLong::REQUIRED_ARGUMENT ],  
+[ "--pass", "-p", GetoptLong::REQUIRED_ARGUMENT ]  
+)  
+# process the parsed options  
+opts.each do |opt, arg|  
+  case opt  
+    when '--hostname'  
+      host_name = arg  
+    when '--port'  
+      port_no = arg  
+    when '--username'  
+      user_name = arg  
+    when '--pass'  
+      password = arg  
+  end  
+end  
+require gives you access to the many extensions and programming libraries bundled with the Ruby programming language-as well as an even larger number of extensions and libraries written independently by other programmers and made available for use with Ruby. We shall be studying require in more detail, later on. Also, later on, we shall study how to access constants using ::
+
+How do I convert objects into an Array? If you want to wrap objects in an Array, you can use a special Kernel module Array method (that starts with a capital letter and looks like a class). This special method converts its argument into an array. For example:
+
+str = 'hello'  
+print Array(str).class # Array  
+Another example:
+
+str = 'hello\nworld'  
+print Array(str) # ["hello\\nworld"]  
+What are the ancestors of Array? Run the following program, to find that out:
+
+a = [1,2,3,4]  
+print a.class.ancestors  
+You should see:
+
+[Array, Enumerable, Object, Kernel, BasicObject]  

@@ -1,0 +1,12 @@
+class A
+  attr_accessor :first_name
+end
+
+class B
+  attr_accessor :title
+end
+
+class C
+  attr_accessor :last_name
+end
+   
